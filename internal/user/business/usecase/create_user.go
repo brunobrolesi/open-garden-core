@@ -3,15 +3,60 @@ package usecase
 import (
 	"context"
 
+	"github.com/brunobrolesi/open-garden-core/internal/user/business/gateway"
 	"github.com/brunobrolesi/open-garden-core/internal/user/business/model"
 )
 
-type CreateUserModel struct {
-	CompanyName string
-	Email       string
-	Password    string
+type (
+	CreateUserModel struct {
+		CompanyName string
+		Email       string
+		Password    string
+	}
+
+	CreateUserUseCase interface {
+		CreateUser(user CreateUserModel, ctx context.Context) (model.Token, error)
+	}
+
+	createUser struct {
+		HashService    gateway.HashService
+		UserRepository gateway.UserRepository
+		TokenService   gateway.TokenService
+	}
+)
+
+func NewCreateUserUseCase(hashService gateway.HashService, userRepository gateway.UserRepository, tokenService gateway.TokenService) CreateUserUseCase {
+	return createUser{
+		HashService:    hashService,
+		UserRepository: userRepository,
+		TokenService:   tokenService,
+	}
 }
 
-type CreateUserUseCase interface {
-	CreateUser(u CreateUserModel, c context.Context) (model.Token, error)
+func (c createUser) CreateUser(user CreateUserModel, ctx context.Context) (model.Token, error) {
+	hashedPassword, err := c.HashService.GenerateHash(user.Password)
+
+	if err != nil {
+		return "", err
+	}
+
+	u := model.User{
+		CompanyName: user.CompanyName,
+		Email:       user.Email,
+		Password:    hashedPassword,
+		Active:      true,
+	}
+	newUser, err := c.UserRepository.CreateUser(u, ctx)
+
+	if err != nil {
+		return "", err
+	}
+
+	token, err := c.TokenService.GenerateToken(newUser.Id)
+
+	if err != nil {
+		return "", err
+	}
+
+	return token, nil
 }
