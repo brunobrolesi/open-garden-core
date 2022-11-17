@@ -2,6 +2,7 @@ package handler_test
 
 import (
 	"bytes"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -190,7 +191,7 @@ func TestCreateUserHandler(t *testing.T) {
 	t.Run("Should return 500 and correct message if CreateUserUseCase returns an no treated error", func(t *testing.T) {
 		testSuite := makeTestSuite()
 
-		testSuite.CreateUserUseCaseMock.On("Exec", mock.Anything, mock.Anything).Return(model.Token(""), model.ErrInternalServer)
+		testSuite.CreateUserUseCaseMock.On("Exec", mock.Anything, mock.Anything).Return(model.Token(""), errors.New("any_error"))
 
 		rr := httptest.NewRecorder()
 		req, _ := http.NewRequest(http.MethodPost, "/register", makeValidBody())

@@ -64,7 +64,7 @@ func (h createUserHandler) Handle(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
+			"error": model.ErrInternalServer.Error(),
 		})
 		return
 	}
