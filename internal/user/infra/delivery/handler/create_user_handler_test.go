@@ -161,23 +161,23 @@ func TestCreateUserHandler(t *testing.T) {
 	t.Run("Should call CreateUserUseCase with correct values", func(t *testing.T) {
 		testSuite := makeTestSuite()
 
-		user := usecase.CreateUserModel{
+		user := usecase.CreateUserInputDto{
 			CompanyName: "valid_company_name",
 			Email:       "valid@mail.com",
 			Password:    "valid_password",
 		}
-		testSuite.CreateUserUseCaseMock.On("CreateUser", mock.Anything, mock.Anything).Return(model.Token(""), model.ErrEmailInUse)
+		testSuite.CreateUserUseCaseMock.On("Exec", mock.Anything, mock.Anything).Return(model.Token(""), model.ErrEmailInUse)
 
 		rr := httptest.NewRecorder()
 		req, _ := http.NewRequest(http.MethodPost, "/register", makeValidBody())
 		testSuite.Sut.ServeHTTP(rr, req)
 
-		testSuite.CreateUserUseCaseMock.AssertCalled(t, "CreateUser", user, mock.Anything)
+		testSuite.CreateUserUseCaseMock.AssertCalled(t, "Exec", user, mock.Anything)
 	})
 	t.Run("Should return 400 and correct message if CreateUserUseCase returns an ErrEmailInUse", func(t *testing.T) {
 		testSuite := makeTestSuite()
 
-		testSuite.CreateUserUseCaseMock.On("CreateUser", mock.Anything, mock.Anything).Return(model.Token(""), model.ErrEmailInUse)
+		testSuite.CreateUserUseCaseMock.On("Exec", mock.Anything, mock.Anything).Return(model.Token(""), model.ErrEmailInUse)
 
 		rr := httptest.NewRecorder()
 		req, _ := http.NewRequest(http.MethodPost, "/register", makeValidBody())
@@ -190,7 +190,7 @@ func TestCreateUserHandler(t *testing.T) {
 	t.Run("Should return 500 and correct message if CreateUserUseCase returns an no treated error", func(t *testing.T) {
 		testSuite := makeTestSuite()
 
-		testSuite.CreateUserUseCaseMock.On("CreateUser", mock.Anything, mock.Anything).Return(model.Token(""), model.ErrInternalServer)
+		testSuite.CreateUserUseCaseMock.On("Exec", mock.Anything, mock.Anything).Return(model.Token(""), model.ErrInternalServer)
 
 		rr := httptest.NewRecorder()
 		req, _ := http.NewRequest(http.MethodPost, "/register", makeValidBody())
@@ -203,7 +203,7 @@ func TestCreateUserHandler(t *testing.T) {
 	t.Run("Should return 201 and token on success", func(t *testing.T) {
 		testSuite := makeTestSuite()
 
-		testSuite.CreateUserUseCaseMock.On("CreateUser", mock.Anything, mock.Anything).Return(model.Token("any_token"), nil)
+		testSuite.CreateUserUseCaseMock.On("Exec", mock.Anything, mock.Anything).Return(model.Token("any_token"), nil)
 
 		rr := httptest.NewRecorder()
 		req, _ := http.NewRequest(http.MethodPost, "/register", makeValidBody())

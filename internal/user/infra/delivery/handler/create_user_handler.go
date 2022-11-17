@@ -47,13 +47,13 @@ func (h createUserHandler) Handle(c *gin.Context) {
 		return
 	}
 
-	user := usecase.CreateUserModel{
+	user := usecase.CreateUserInputDto{
 		CompanyName: body.CompanyName,
 		Email:       body.Email,
 		Password:    body.Password,
 	}
 
-	token, err := h.CreateUserUseCase.CreateUser(user, c)
+	token, err := h.CreateUserUseCase.Exec(user, c)
 
 	if errors.Is(err, model.ErrEmailInUse) {
 		c.JSON(http.StatusBadRequest, gin.H{

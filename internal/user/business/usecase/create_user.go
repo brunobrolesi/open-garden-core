@@ -8,14 +8,14 @@ import (
 )
 
 type (
-	CreateUserModel struct {
+	CreateUserInputDto struct {
 		CompanyName string
 		Email       string
 		Password    string
 	}
 
 	CreateUserUseCase interface {
-		CreateUser(user CreateUserModel, ctx context.Context) (model.Token, error)
+		Exec(user CreateUserInputDto, ctx context.Context) (model.Token, error)
 	}
 
 	createUser struct {
@@ -33,7 +33,7 @@ func NewCreateUserUseCase(hashService gateway.HashService, userRepository gatewa
 	}
 }
 
-func (c createUser) CreateUser(user CreateUserModel, ctx context.Context) (model.Token, error) {
+func (c createUser) Exec(user CreateUserInputDto, ctx context.Context) (model.Token, error) {
 	hashedPassword, err := c.HashService.GenerateHash(user.Password)
 
 	if err != nil {
