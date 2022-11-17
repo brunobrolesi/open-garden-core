@@ -45,12 +45,12 @@ func (h authenticateUserHandler) Handle(c *gin.Context) {
 		return
 	}
 
-	credentials := usecase.Credentials{
+	credentials := usecase.AuthenticateUserInputDto{
 		Email:    body.Email,
 		Password: body.Password,
 	}
 
-	token, err := h.AuthenticateUserUseCase.AuthenticateUser(credentials, c)
+	token, err := h.AuthenticateUserUseCase.Exec(credentials, c)
 
 	if errors.Is(err, model.ErrAuthentication) {
 		c.JSON(http.StatusUnauthorized, gin.H{

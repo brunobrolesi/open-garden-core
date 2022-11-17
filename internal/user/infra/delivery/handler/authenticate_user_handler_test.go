@@ -119,22 +119,22 @@ func TestAuthenticateUserHandler(t *testing.T) {
 	t.Run("Should call AuthenticateUserUseCase with correct values", func(t *testing.T) {
 		testSuite := makeTestSuite()
 
-		credentials := usecase.Credentials{
+		credentials := usecase.AuthenticateUserInputDto{
 			Email:    "valid@mail.com",
 			Password: "valid_password",
 		}
-		testSuite.AuthenticateUserUserUseCaseMock.On("AuthenticateUser", mock.Anything, mock.Anything).Return(model.Token(""), errors.New("any_error"))
+		testSuite.AuthenticateUserUserUseCaseMock.On("Exec", mock.Anything, mock.Anything).Return(model.Token(""), errors.New("any_error"))
 
 		rr := httptest.NewRecorder()
 		req, _ := http.NewRequest(http.MethodPost, "/login", makeValidBody())
 		testSuite.Sut.ServeHTTP(rr, req)
 
-		testSuite.AuthenticateUserUserUseCaseMock.AssertCalled(t, "AuthenticateUser", credentials, mock.Anything)
+		testSuite.AuthenticateUserUserUseCaseMock.AssertCalled(t, "Exec", credentials, mock.Anything)
 	})
 	t.Run("Should return 401 and correct message if AuthenticateUserUseCase returns an ErrAuthentication", func(t *testing.T) {
 		testSuite := makeTestSuite()
 
-		testSuite.AuthenticateUserUserUseCaseMock.On("AuthenticateUser", mock.Anything, mock.Anything).Return(model.Token(""), model.ErrAuthentication)
+		testSuite.AuthenticateUserUserUseCaseMock.On("Exec", mock.Anything, mock.Anything).Return(model.Token(""), model.ErrAuthentication)
 
 		rr := httptest.NewRecorder()
 		req, _ := http.NewRequest(http.MethodPost, "/login", makeValidBody())
@@ -147,7 +147,7 @@ func TestAuthenticateUserHandler(t *testing.T) {
 	t.Run("Should return 500 and correct message if AuthenticateUserUseCase returns an no treated error", func(t *testing.T) {
 		testSuite := makeTestSuite()
 
-		testSuite.AuthenticateUserUserUseCaseMock.On("AuthenticateUser", mock.Anything, mock.Anything).Return(model.Token(""), errors.New("any_error"))
+		testSuite.AuthenticateUserUserUseCaseMock.On("Exec", mock.Anything, mock.Anything).Return(model.Token(""), errors.New("any_error"))
 
 		rr := httptest.NewRecorder()
 		req, _ := http.NewRequest(http.MethodPost, "/login", makeValidBody())
@@ -160,7 +160,7 @@ func TestAuthenticateUserHandler(t *testing.T) {
 	t.Run("Should return 200 and token on success", func(t *testing.T) {
 		testSuite := makeTestSuite()
 
-		testSuite.AuthenticateUserUserUseCaseMock.On("AuthenticateUser", mock.Anything, mock.Anything).Return(model.Token("any_token"), nil)
+		testSuite.AuthenticateUserUserUseCaseMock.On("Exec", mock.Anything, mock.Anything).Return(model.Token("any_token"), nil)
 
 		rr := httptest.NewRecorder()
 		req, _ := http.NewRequest(http.MethodPost, "/login", makeValidBody())

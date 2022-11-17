@@ -8,13 +8,13 @@ import (
 )
 
 type (
-	Credentials struct {
+	AuthenticateUserInputDto struct {
 		Email    string
 		Password string
 	}
 
 	AuthenticateUserUseCase interface {
-		AuthenticateUser(credentials Credentials, ctx context.Context) (model.Token, error)
+		Exec(credentials AuthenticateUserInputDto, ctx context.Context) (model.Token, error)
 	}
 
 	authenticateUser struct {
@@ -32,7 +32,7 @@ func NewAuthenticateUserUseCase(hashService gateway.HashService, userRepository 
 	}
 }
 
-func (a authenticateUser) AuthenticateUser(credentials Credentials, ctx context.Context) (model.Token, error) {
+func (a authenticateUser) Exec(credentials AuthenticateUserInputDto, ctx context.Context) (model.Token, error) {
 	user, err := a.UserRepository.GetUserByEmail(credentials.Email, ctx)
 
 	if err != nil {
