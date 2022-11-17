@@ -9,6 +9,7 @@ func UserRouter(r *gin.Engine) *gin.RouterGroup {
 	user := r.Group("")
 	{
 		user.POST("/register", factory.CreateUserFactory().Handle)
+		user.POST("/login", factory.AuthenticateUserFactory().Handle)
 	}
 
 	return user
