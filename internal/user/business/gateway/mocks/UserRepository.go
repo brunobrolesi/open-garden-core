@@ -57,6 +57,27 @@ func (_m *UserRepository) GetUserByEmail(_a0 string, _a1 context.Context) (model
 	return r0, r1
 }
 
+// IsEmailInUse provides a mock function with given fields: _a0, _a1
+func (_m *UserRepository) IsEmailInUse(_a0 string, _a1 context.Context) (bool, error) {
+	ret := _m.Called(_a0, _a1)
+
+	var r0 bool
+	if rf, ok := ret.Get(0).(func(string, context.Context) bool); ok {
+		r0 = rf(_a0, _a1)
+	} else {
+		r0 = ret.Get(0).(bool)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string, context.Context) error); ok {
+		r1 = rf(_a0, _a1)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 type mockConstructorTestingTNewUserRepository interface {
 	mock.TestingT
 	Cleanup(func())

@@ -12,6 +12,7 @@ import (
 const (
 	createUserQuery     = "insert into users(company_name, email, password, active) values($1, $2, $3, $4) returning (id)"
 	getUserByEmailQuery = "select id, company_name, email, password, active from users where email=$1"
+	checkEmailInUse     = "select email from users where email=$1"
 )
 
 type postgresUserRepository struct {
@@ -38,4 +39,19 @@ func (r postgresUserRepository) GetUserByEmail(email string, ctx context.Context
 	user := model.User{}
 	err := r.conn.QueryRow(ctx, getUserByEmailQuery, email).Scan(&user.Id, &user.CompanyName, &user.Email, &user.Password, &user.Active)
 	return user, err
+}
+
+func (r postgresUserRepository) IsEmailInUse(email string, ctx context.Context) (bool, error) {
+	var e string
+	err := r.conn.QueryRow(ctx, checkEmailInUse, email).Scan(&e)
+
+	if err != nil {
+		return false, err
+	}
+
+	if e != "" {
+		return true, nil
+	}
+
+	return false, nil
 }

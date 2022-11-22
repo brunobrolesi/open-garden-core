@@ -38,8 +38,34 @@ func TestCreateUserUseCase(t *testing.T) {
 			Password:    "valid_password",
 		}
 	}
+
+	t.Run("Should call IsEmailInUse from UserRepository with correct values", func(t *testing.T) {
+		testSuite := makeTestSuite()
+		user := makeCreateUserInputDto()
+		ctx := context.Background()
+		testSuite.UserRepositoryMock.On("IsEmailInUse", mock.Anything, mock.Anything).Return(false, errors.New("any_error"))
+		testSuite.Sut.Exec(user, ctx)
+		testSuite.UserRepositoryMock.AssertCalled(t, "IsEmailInUse", user.Email, ctx)
+	})
+	t.Run("Should return an error if IsEmailInUse from UserRepository returns an error", func(t *testing.T) {
+		testSuite := makeTestSuite()
+		user := makeCreateUserInputDto()
+		testSuite.UserRepositoryMock.On("IsEmailInUse", mock.Anything, mock.Anything).Return(false, errors.New("is_email_in_use_error"))
+		token, err := testSuite.Sut.Exec(user, context.Background())
+		assert.Empty(t, token)
+		assert.Error(t, err, "is_email_in_use_error")
+	})
+	t.Run("Should return an error if email is in use", func(t *testing.T) {
+		testSuite := makeTestSuite()
+		user := makeCreateUserInputDto()
+		testSuite.UserRepositoryMock.On("IsEmailInUse", mock.Anything, mock.Anything).Return(true, nil)
+		token, err := testSuite.Sut.Exec(user, context.Background())
+		assert.Empty(t, token)
+		assert.Error(t, err, model.ErrEmailInUse.Error())
+	})
 	t.Run("Should call GenerateHash from HashService with correct value", func(t *testing.T) {
 		testSuite := makeTestSuite()
+		testSuite.UserRepositoryMock.On("IsEmailInUse", mock.Anything, mock.Anything).Return(false, nil)
 		testSuite.HashServiceMock.On("GenerateHash", mock.Anything).Return("", errors.New("any_error"))
 		user := makeCreateUserInputDto()
 		testSuite.Sut.Exec(user, context.Background())
@@ -48,6 +74,7 @@ func TestCreateUserUseCase(t *testing.T) {
 	})
 	t.Run("Should return an error if GenerateHash from HashService returns an error", func(t *testing.T) {
 		testSuite := makeTestSuite()
+		testSuite.UserRepositoryMock.On("IsEmailInUse", mock.Anything, mock.Anything).Return(false, nil)
 		testSuite.HashServiceMock.On("GenerateHash", mock.Anything).Return("", errors.New("hash_error"))
 		user := makeCreateUserInputDto()
 		token, err := testSuite.Sut.Exec(user, context.Background())
@@ -58,6 +85,7 @@ func TestCreateUserUseCase(t *testing.T) {
 		testSuite := makeTestSuite()
 		user := makeCreateUserInputDto()
 		ctx := context.Background()
+		testSuite.UserRepositoryMock.On("IsEmailInUse", mock.Anything, mock.Anything).Return(false, nil)
 		testSuite.HashServiceMock.On("GenerateHash", mock.Anything).Return("any_hash", nil)
 		testSuite.UserRepositoryMock.On("CreateUser", mock.Anything, mock.Anything).Return(model.User{}, errors.New("any_error"))
 		testSuite.Sut.Exec(user, ctx)
@@ -72,6 +100,7 @@ func TestCreateUserUseCase(t *testing.T) {
 	t.Run("Should return an error if CreateUser from UserRepository returns an error", func(t *testing.T) {
 		testSuite := makeTestSuite()
 		user := makeCreateUserInputDto()
+		testSuite.UserRepositoryMock.On("IsEmailInUse", mock.Anything, mock.Anything).Return(false, nil)
 		testSuite.HashServiceMock.On("GenerateHash", mock.Anything).Return("any_hash", nil)
 		testSuite.UserRepositoryMock.On("CreateUser", mock.Anything, mock.Anything).Return(model.User{}, errors.New("user_repository_error"))
 		token, err := testSuite.Sut.Exec(user, context.Background())
@@ -80,6 +109,7 @@ func TestCreateUserUseCase(t *testing.T) {
 	})
 	t.Run("Should call GenerateToken from TokenService with correct values", func(t *testing.T) {
 		testSuite := makeTestSuite()
+		testSuite.UserRepositoryMock.On("IsEmailInUse", mock.Anything, mock.Anything).Return(false, nil)
 		testSuite.HashServiceMock.On("GenerateHash", mock.Anything).Return("any_hash", nil)
 		user := model.User{
 			Id:          1,
@@ -95,6 +125,7 @@ func TestCreateUserUseCase(t *testing.T) {
 	})
 	t.Run("Should return an error if GenerateToken from TokenService returns an error", func(t *testing.T) {
 		testSuite := makeTestSuite()
+		testSuite.UserRepositoryMock.On("IsEmailInUse", mock.Anything, mock.Anything).Return(false, nil)
 		testSuite.HashServiceMock.On("GenerateHash", mock.Anything).Return("any_hash", nil)
 		user := model.User{
 			Id:          1,
@@ -111,6 +142,7 @@ func TestCreateUserUseCase(t *testing.T) {
 	})
 	t.Run("Should return a token on success", func(t *testing.T) {
 		testSuite := makeTestSuite()
+		testSuite.UserRepositoryMock.On("IsEmailInUse", mock.Anything, mock.Anything).Return(false, nil)
 		testSuite.HashServiceMock.On("GenerateHash", mock.Anything).Return("any_hash", nil)
 		user := model.User{
 			Id:          1,

@@ -34,6 +34,16 @@ func NewCreateUserUseCase(hashService gateway.HashService, userRepository gatewa
 }
 
 func (c createUser) Exec(user CreateUserInputDto, ctx context.Context) (model.Token, error) {
+	isEmailInUse, err := c.UserRepository.IsEmailInUse(user.Email, ctx)
+
+	if err != nil {
+		return "", err
+	}
+
+	if isEmailInUse {
+		return "", model.ErrEmailInUse
+	}
+
 	hashedPassword, err := c.HashService.GenerateHash(user.Password)
 
 	if err != nil {
