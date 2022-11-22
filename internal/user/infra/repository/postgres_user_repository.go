@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 
+	"github.com/brunobrolesi/open-garden-core/internal/shared"
 	"github.com/brunobrolesi/open-garden-core/internal/user/business/gateway"
 	"github.com/brunobrolesi/open-garden-core/internal/user/business/model"
 	"github.com/jackc/pgx/v5"
@@ -25,6 +26,11 @@ func NewPostgresUserRepository(conn *pgx.Conn) gateway.UserRepository {
 
 func (r postgresUserRepository) CreateUser(user model.User, ctx context.Context) (model.User, error) {
 	err := r.conn.QueryRow(ctx, createUserQuery, user.CompanyName, user.Email, user.Password, user.Active).Scan(&user.Id)
+
+	if shared.IsPostgreSqlError(err, shared.POSTGRESQL_UNIQUE_VIOLATION_CODE) {
+		return model.User{}, model.ErrEmailInUse
+	}
+
 	return user, err
 }
 
