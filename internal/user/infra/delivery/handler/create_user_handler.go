@@ -6,6 +6,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/brunobrolesi/open-garden-core/internal/shared"
 	"github.com/brunobrolesi/open-garden-core/internal/user/business/model"
 	"github.com/brunobrolesi/open-garden-core/internal/user/business/usecase"
 	"github.com/gin-gonic/gin"
@@ -64,7 +65,7 @@ func (h createUserHandler) Handle(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": model.ErrInternalServer.Error(),
+			"error": shared.ErrApiInternalServer.Error(),
 		})
 		return
 	}
