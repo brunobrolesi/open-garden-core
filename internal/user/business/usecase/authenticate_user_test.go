@@ -63,6 +63,14 @@ func TestAuthenticateUserUseCase(t *testing.T) {
 		assert.Empty(t, token)
 		assert.Error(t, err, "user_repository_error")
 	})
+	t.Run("Should return ErrAuthentication if user not exists", func(t *testing.T) {
+		testSuite := makeTestSuite()
+		testSuite.UserRepositoryMock.On("GetUserByEmail", mock.Anything, mock.Anything).Return(model.User{}, nil)
+		credentials := makeAuthenticateUserInputDto()
+		token, err := testSuite.Sut.Exec(credentials, context.Background())
+		assert.Empty(t, token)
+		assert.Error(t, err, model.ErrAuthentication.Error())
+	})
 	t.Run("Should call CompareStringAndHash from HashService with correct values", func(t *testing.T) {
 		testSuite := makeTestSuite()
 		credentials := makeAuthenticateUserInputDto()

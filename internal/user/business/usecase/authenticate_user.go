@@ -36,6 +36,10 @@ func (a authenticateUser) Exec(credentials AuthenticateUserInputDto, ctx context
 	user, err := a.UserRepository.GetUserByEmail(credentials.Email, ctx)
 
 	if err != nil {
+		return "", err
+	}
+
+	if user.EmailIsEmpty() {
 		return "", model.ErrAuthentication
 	}
 

@@ -7,3 +7,7 @@ type User struct {
 	Password    string
 	Active      bool
 }
+
+func (u *User) EmailIsEmpty() bool {
+	return u.Email == ""
+}

@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"errors"
 
 	"github.com/brunobrolesi/open-garden-core/internal/shared"
 	"github.com/brunobrolesi/open-garden-core/internal/user/business/gateway"
@@ -38,7 +39,12 @@ func (r postgresUserRepository) CreateUser(user model.User, ctx context.Context)
 func (r postgresUserRepository) GetUserByEmail(email string, ctx context.Context) (model.User, error) {
 	user := model.User{}
 	err := r.conn.QueryRow(ctx, getUserByEmailQuery, email).Scan(&user.Id, &user.CompanyName, &user.Email, &user.Password, &user.Active)
-	return user, err
+
+	if !errors.Is(err, pgx.ErrNoRows) {
+		return user, err
+	}
+
+	return user, nil
 }
 
 func (r postgresUserRepository) IsEmailInUse(email string, ctx context.Context) (bool, error) {
