@@ -1,6 +1,9 @@
 package service
 
 import (
+	"fmt"
+	"time"
+
 	"github.com/brunobrolesi/open-garden-core/internal/user/business/gateway"
 	"github.com/brunobrolesi/open-garden-core/internal/user/business/model"
 	"github.com/golang-jwt/jwt/v4"
@@ -17,9 +20,13 @@ func NewJwtTokenService(secret string) gateway.TokenService {
 }
 
 func (s jwtTokenService) GenerateToken(userId int) (model.Token, error) {
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"id": userId,
-	})
+	claims := jwt.RegisteredClaims{
+		Subject:   fmt.Sprint(userId),
+		ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
+		IssuedAt:  jwt.NewNumericDate(time.Now()),
+		NotBefore: jwt.NewNumericDate(time.Now()),
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	tokenString, err := token.SignedString([]byte(s.Secret))
 
