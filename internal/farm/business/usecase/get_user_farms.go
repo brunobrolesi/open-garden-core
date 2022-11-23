@@ -24,11 +24,11 @@ func NewGetUserFarmsUseCase(farmRepository gateway.FarmRepository) GetUserFarmsU
 }
 
 func (g getUserFarms) Exec(userId int, ctx context.Context) (model.Farms, error) {
-	newFarm, err := g.FarmRepository.GetFarmsByUserId(userId, ctx)
+	farms, err := g.FarmRepository.GetFarmsByUserId(userId, ctx)
 
 	if err != nil {
 		return model.Farms{}, err
 	}
 
-	return newFarm, nil
+	return farms, nil
 }
