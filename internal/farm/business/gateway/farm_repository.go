@@ -9,4 +9,5 @@ import (
 type FarmRepository interface {
 	CreateFarm(model.Farm, context.Context) (model.Farm, error)
 	GetFarmsByUserId(int, context.Context) (model.Farms, error)
+	GetFarmByFarmIdAndUserId(int, int, context.Context) (model.Farm, error)
 }
