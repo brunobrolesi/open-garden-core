@@ -6,9 +6,10 @@ import (
 )
 
 func UserRouter(r *gin.Engine) *gin.RouterGroup {
-	user := r.Group("/farm")
+	user := r.Group("/farms")
 	{
 		user.POST("/", factory.AuthMiddlewareFactory().Handle, factory.CreateFarmFactory().Handle)
+		user.GET("/", factory.AuthMiddlewareFactory().Handle, factory.GetUserFarmsFactory().Handle)
 	}
 
 	return user
