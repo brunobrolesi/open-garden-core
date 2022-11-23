@@ -40,7 +40,7 @@ func (r postgresUserRepository) GetUserByEmail(email string, ctx context.Context
 	user := model.User{}
 	err := r.conn.QueryRow(ctx, getUserByEmailQuery, email).Scan(&user.Id, &user.CompanyName, &user.Email, &user.Password, &user.Active)
 
-	if !errors.Is(err, pgx.ErrNoRows) {
+	if !errors.Is(err, pgx.ErrNoRows) && err != nil {
 		return user, err
 	}
 
@@ -51,13 +51,13 @@ func (r postgresUserRepository) IsEmailInUse(email string, ctx context.Context) 
 	var e string
 	err := r.conn.QueryRow(ctx, checkEmailInUse, email).Scan(&e)
 
+	if errors.Is(err, pgx.ErrNoRows) {
+		return false, nil
+	}
+
 	if err != nil {
 		return false, err
 	}
 
-	if e != "" {
-		return true, nil
-	}
-
-	return false, nil
+	return true, nil
 }
