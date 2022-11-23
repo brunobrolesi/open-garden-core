@@ -34,6 +34,7 @@ func (c createFarm) Exec(farm CreateFarmInputDto, ctx context.Context) (model.Fa
 		Name:    farm.Name,
 		Owner:   farm.Owner,
 		Address: farm.Address,
+		Active:  true,
 	}
 	newFarm, err := c.FarmRepository.CreateFarm(f, ctx)
 

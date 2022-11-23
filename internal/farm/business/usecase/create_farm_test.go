@@ -43,6 +43,7 @@ func TestCreateFarmUseCase(t *testing.T) {
 			Name:    farm.Name,
 			Address: farm.Address,
 			Owner:   farm.Owner,
+			Active:  true,
 		}
 		testSuite.FarmRepositoryMock.AssertCalled(t, "CreateFarm", expectedFarmCall, ctx)
 	})
@@ -64,6 +65,7 @@ func TestCreateFarmUseCase(t *testing.T) {
 			Name:    farm.Name,
 			Address: farm.Address,
 			Owner:   1,
+			Active:  true,
 		}
 		testSuite.FarmRepositoryMock.On("CreateFarm", mock.Anything, mock.Anything).Return(expected, nil)
 		result, err := testSuite.Sut.Exec(farm, ctx)
