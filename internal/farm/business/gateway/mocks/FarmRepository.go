@@ -36,6 +36,29 @@ func (_m *FarmRepository) CreateFarm(_a0 model.Farm, _a1 context.Context) (model
 	return r0, r1
 }
 
+// GetFarmsByUserId provides a mock function with given fields: _a0, _a1
+func (_m *FarmRepository) GetFarmsByUserId(_a0 int, _a1 context.Context) (model.Farms, error) {
+	ret := _m.Called(_a0, _a1)
+
+	var r0 model.Farms
+	if rf, ok := ret.Get(0).(func(int, context.Context) model.Farms); ok {
+		r0 = rf(_a0, _a1)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(model.Farms)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(int, context.Context) error); ok {
+		r1 = rf(_a0, _a1)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 type mockConstructorTestingTNewFarmRepository interface {
 	mock.TestingT
 	Cleanup(func())

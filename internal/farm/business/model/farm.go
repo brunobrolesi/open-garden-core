@@ -7,3 +7,5 @@ type Farm struct {
 	Address string `json:"address"`
 	Active  bool   `json:"active"`
 }
+
+type Farms []Farm
