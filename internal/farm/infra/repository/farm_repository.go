@@ -10,8 +10,9 @@ import (
 )
 
 const (
-	createFarmQuery      = "insert into farms(name, address, owner, active) values($1, $2, $3, $4) returning (id)"
-	getAllUserFarmsQuery = "SELECT id, name, address, owner, active FROM farms WHERE owner=$1"
+	createFarmQuery           = "insert into farms(name, address, owner, active) values($1, $2, $3, $4) returning (id)"
+	getAllUserFarmsQuery      = "SELECT id, name, address, owner, active FROM farms WHERE owner=$1"
+	getFarmByIdAndUserIdQuery = "SELECT id, name, address, owner, active FROM farms WHERE id=$1 AND owner=$2"
 )
 
 type postgresFarmRepository struct {
@@ -51,4 +52,15 @@ func (r postgresFarmRepository) GetFarmsByUserId(userId int, ctx context.Context
 	}
 
 	return farms, nil
+}
+
+func (r postgresFarmRepository) GetFarmByIdAndUserId(id int, userId int, ctx context.Context) (model.Farm, error) {
+	farm := model.Farm{}
+	err := r.conn.QueryRow(ctx, getFarmByIdAndUserIdQuery, id, userId).Scan(&farm.Id, &farm.Name, &farm.Address, &farm.Owner, &farm.Active)
+
+	if !errors.Is(err, pgx.ErrNoRows) && err != nil {
+		return model.Farm{}, err
+	}
+
+	return farm, nil
 }
