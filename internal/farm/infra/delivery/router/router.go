@@ -10,6 +10,7 @@ func UserRouter(r *gin.Engine) *gin.RouterGroup {
 	{
 		user.POST("/", factory.AuthMiddlewareFactory().Handle, factory.CreateFarmFactory().Handle)
 		user.GET("/", factory.AuthMiddlewareFactory().Handle, factory.GetUserFarmsFactory().Handle)
+		user.GET("/:id", factory.AuthMiddlewareFactory().Handle, factory.GetUserFarmFactory().Handle)
 	}
 
 	return user

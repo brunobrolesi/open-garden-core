@@ -9,3 +9,7 @@ type Farm struct {
 }
 
 type Farms []Farm
+
+func (f *Farm) IdIsEmpty() bool {
+	return f.Id == 0
+}
