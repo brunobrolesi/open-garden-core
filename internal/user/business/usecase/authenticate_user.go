@@ -14,7 +14,7 @@ type (
 	}
 
 	AuthenticateUserUseCase interface {
-		Exec(credentials AuthenticateUserInputDto, ctx context.Context) (model.Token, error)
+		Exec(ctx context.Context, credentials AuthenticateUserInputDto) (model.Token, error)
 	}
 
 	authenticateUser struct {
@@ -32,8 +32,8 @@ func NewAuthenticateUserUseCase(hashService gateway.HashService, userRepository 
 	}
 }
 
-func (a authenticateUser) Exec(credentials AuthenticateUserInputDto, ctx context.Context) (model.Token, error) {
-	user, err := a.UserRepository.GetUserByEmail(credentials.Email, ctx)
+func (a authenticateUser) Exec(ctx context.Context, credentials AuthenticateUserInputDto) (model.Token, error) {
+	user, err := a.UserRepository.GetUserByEmail(ctx, credentials.Email)
 
 	if err != nil {
 		return "", err

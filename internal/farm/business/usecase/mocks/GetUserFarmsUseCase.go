@@ -14,13 +14,13 @@ type GetUserFarmsUseCase struct {
 	mock.Mock
 }
 
-// Exec provides a mock function with given fields: userId, ctx
-func (_m *GetUserFarmsUseCase) Exec(userId int, ctx context.Context) (model.Farms, error) {
-	ret := _m.Called(userId, ctx)
+// Exec provides a mock function with given fields: ctx, userId
+func (_m *GetUserFarmsUseCase) Exec(ctx context.Context, userId int) (model.Farms, error) {
+	ret := _m.Called(ctx, userId)
 
 	var r0 model.Farms
-	if rf, ok := ret.Get(0).(func(int, context.Context) model.Farms); ok {
-		r0 = rf(userId, ctx)
+	if rf, ok := ret.Get(0).(func(context.Context, int) model.Farms); ok {
+		r0 = rf(ctx, userId)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(model.Farms)
@@ -28,8 +28,8 @@ func (_m *GetUserFarmsUseCase) Exec(userId int, ctx context.Context) (model.Farm
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(int, context.Context) error); ok {
-		r1 = rf(userId, ctx)
+	if rf, ok := ret.Get(1).(func(context.Context, int) error); ok {
+		r1 = rf(ctx, userId)
 	} else {
 		r1 = ret.Error(1)
 	}

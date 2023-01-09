@@ -26,7 +26,7 @@ func NewPostgresUserRepository(conn *pgx.Conn) gateway.UserRepository {
 	}
 }
 
-func (r postgresUserRepository) CreateUser(user model.User, ctx context.Context) (model.User, error) {
+func (r postgresUserRepository) CreateUser(ctx context.Context, user model.User) (model.User, error) {
 	err := r.conn.QueryRow(ctx, createUserQuery, user.CompanyName, user.Email, user.Password, user.Active).Scan(&user.Id)
 
 	if shared.IsPostgreSqlError(err, shared.POSTGRESQL_UNIQUE_VIOLATION_CODE) {
@@ -36,7 +36,7 @@ func (r postgresUserRepository) CreateUser(user model.User, ctx context.Context)
 	return user, err
 }
 
-func (r postgresUserRepository) GetUserByEmail(email string, ctx context.Context) (model.User, error) {
+func (r postgresUserRepository) GetUserByEmail(ctx context.Context, email string) (model.User, error) {
 	user := model.User{}
 	err := r.conn.QueryRow(ctx, getUserByEmailQuery, email).Scan(&user.Id, &user.CompanyName, &user.Email, &user.Password, &user.Active)
 
@@ -47,7 +47,7 @@ func (r postgresUserRepository) GetUserByEmail(email string, ctx context.Context
 	return user, nil
 }
 
-func (r postgresUserRepository) IsEmailInUse(email string, ctx context.Context) (bool, error) {
+func (r postgresUserRepository) IsEmailInUse(ctx context.Context, email string) (bool, error) {
 	var e string
 	err := r.conn.QueryRow(ctx, checkEmailInUse, email).Scan(&e)
 

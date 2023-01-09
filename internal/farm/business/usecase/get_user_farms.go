@@ -9,7 +9,7 @@ import (
 
 type (
 	GetUserFarmsUseCase interface {
-		Exec(userId int, ctx context.Context) (model.Farms, error)
+		Exec(ctx context.Context, userId int) (model.Farms, error)
 	}
 
 	getUserFarms struct {
@@ -23,8 +23,8 @@ func NewGetUserFarmsUseCase(farmRepository gateway.FarmRepository) GetUserFarmsU
 	}
 }
 
-func (g getUserFarms) Exec(userId int, ctx context.Context) (model.Farms, error) {
-	farms, err := g.FarmRepository.GetFarmsByUserId(userId, ctx)
+func (g getUserFarms) Exec(ctx context.Context, userId int) (model.Farms, error) {
+	farms, err := g.FarmRepository.GetFarmsByUserId(ctx, userId)
 
 	if err != nil {
 		return model.Farms{}, err

@@ -16,18 +16,18 @@ type UserRepository struct {
 }
 
 // CreateUser provides a mock function with given fields: _a0, _a1
-func (_m *UserRepository) CreateUser(_a0 model.User, _a1 context.Context) (model.User, error) {
+func (_m *UserRepository) CreateUser(_a0 context.Context, _a1 model.User) (model.User, error) {
 	ret := _m.Called(_a0, _a1)
 
 	var r0 model.User
-	if rf, ok := ret.Get(0).(func(model.User, context.Context) model.User); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, model.User) model.User); ok {
 		r0 = rf(_a0, _a1)
 	} else {
 		r0 = ret.Get(0).(model.User)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(model.User, context.Context) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, model.User) error); ok {
 		r1 = rf(_a0, _a1)
 	} else {
 		r1 = ret.Error(1)
@@ -37,18 +37,18 @@ func (_m *UserRepository) CreateUser(_a0 model.User, _a1 context.Context) (model
 }
 
 // GetUserByEmail provides a mock function with given fields: _a0, _a1
-func (_m *UserRepository) GetUserByEmail(_a0 string, _a1 context.Context) (model.User, error) {
+func (_m *UserRepository) GetUserByEmail(_a0 context.Context, _a1 string) (model.User, error) {
 	ret := _m.Called(_a0, _a1)
 
 	var r0 model.User
-	if rf, ok := ret.Get(0).(func(string, context.Context) model.User); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, string) model.User); ok {
 		r0 = rf(_a0, _a1)
 	} else {
 		r0 = ret.Get(0).(model.User)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(string, context.Context) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
 		r1 = rf(_a0, _a1)
 	} else {
 		r1 = ret.Error(1)
@@ -58,18 +58,18 @@ func (_m *UserRepository) GetUserByEmail(_a0 string, _a1 context.Context) (model
 }
 
 // IsEmailInUse provides a mock function with given fields: _a0, _a1
-func (_m *UserRepository) IsEmailInUse(_a0 string, _a1 context.Context) (bool, error) {
+func (_m *UserRepository) IsEmailInUse(_a0 context.Context, _a1 string) (bool, error) {
 	ret := _m.Called(_a0, _a1)
 
 	var r0 bool
-	if rf, ok := ret.Get(0).(func(string, context.Context) bool); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, string) bool); ok {
 		r0 = rf(_a0, _a1)
 	} else {
 		r0 = ret.Get(0).(bool)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(string, context.Context) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
 		r1 = rf(_a0, _a1)
 	} else {
 		r1 = ret.Error(1)

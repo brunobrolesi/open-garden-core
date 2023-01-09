@@ -30,7 +30,7 @@ func (h getUserFarmsHandler) Handle(c *gin.Context) {
 		return
 	}
 
-	result, err := h.GetUserFarmsUseCase.Exec(userId, c)
+	result, err := h.GetUserFarmsUseCase.Exec(c, userId)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

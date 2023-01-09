@@ -15,7 +15,7 @@ type (
 	}
 
 	CreateUserUseCase interface {
-		Exec(user CreateUserInputDto, ctx context.Context) (model.Token, error)
+		Exec(ctx context.Context, user CreateUserInputDto) (model.Token, error)
 	}
 
 	createUser struct {
@@ -33,8 +33,8 @@ func NewCreateUserUseCase(hashService gateway.HashService, userRepository gatewa
 	}
 }
 
-func (c createUser) Exec(user CreateUserInputDto, ctx context.Context) (model.Token, error) {
-	isEmailInUse, err := c.UserRepository.IsEmailInUse(user.Email, ctx)
+func (c createUser) Exec(ctx context.Context, user CreateUserInputDto) (model.Token, error) {
+	isEmailInUse, err := c.UserRepository.IsEmailInUse(ctx, user.Email)
 
 	if err != nil {
 		return "", err
@@ -56,7 +56,7 @@ func (c createUser) Exec(user CreateUserInputDto, ctx context.Context) (model.To
 		Password:    hashedPassword,
 		Active:      true,
 	}
-	newUser, err := c.UserRepository.CreateUser(u, ctx)
+	newUser, err := c.UserRepository.CreateUser(ctx, u)
 
 	if err != nil {
 		return "", err

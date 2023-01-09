@@ -51,7 +51,7 @@ func (h authenticateUserHandler) Handle(c *gin.Context) {
 		Password: body.Password,
 	}
 
-	token, err := h.AuthenticateUserUseCase.Exec(credentials, c)
+	token, err := h.AuthenticateUserUseCase.Exec(c, credentials)
 
 	if errors.Is(err, model.ErrAuthentication) {
 		c.JSON(http.StatusUnauthorized, gin.H{

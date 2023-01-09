@@ -54,7 +54,7 @@ func (h createUserHandler) Handle(c *gin.Context) {
 		Password:    body.Password,
 	}
 
-	token, err := h.CreateUserUseCase.Exec(user, c)
+	token, err := h.CreateUserUseCase.Exec(c, user)
 
 	if errors.Is(err, model.ErrEmailInUse) {
 		c.JSON(http.StatusBadRequest, gin.H{

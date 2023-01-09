@@ -59,7 +59,7 @@ func (h createFarmHandler) Handle(c *gin.Context) {
 		Owner:   userId,
 	}
 
-	result, err := h.CreateFarmUseCase.Exec(farm, c)
+	result, err := h.CreateFarmUseCase.Exec(c, farm)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

@@ -129,7 +129,7 @@ func TestAuthenticateUserHandler(t *testing.T) {
 		req, _ := http.NewRequest(http.MethodPost, "/login", makeValidBody())
 		testSuite.Sut.ServeHTTP(rr, req)
 
-		testSuite.AuthenticateUserUserUseCaseMock.AssertCalled(t, "Exec", credentials, mock.Anything)
+		testSuite.AuthenticateUserUserUseCaseMock.AssertCalled(t, "Exec", mock.Anything, credentials)
 	})
 	t.Run("Should return 401 and correct message if AuthenticateUserUseCase returns an ErrAuthentication", func(t *testing.T) {
 		testSuite := makeTestSuite()

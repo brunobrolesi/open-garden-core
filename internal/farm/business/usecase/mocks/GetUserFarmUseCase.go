@@ -16,20 +16,20 @@ type GetUserFarmUseCase struct {
 	mock.Mock
 }
 
-// Exec provides a mock function with given fields: input, ctx
-func (_m *GetUserFarmUseCase) Exec(input usecase.GetUserFarmInputDto, ctx context.Context) (model.Farm, error) {
-	ret := _m.Called(input, ctx)
+// Exec provides a mock function with given fields: ctx, input
+func (_m *GetUserFarmUseCase) Exec(ctx context.Context, input usecase.GetUserFarmInputDto) (model.Farm, error) {
+	ret := _m.Called(ctx, input)
 
 	var r0 model.Farm
-	if rf, ok := ret.Get(0).(func(usecase.GetUserFarmInputDto, context.Context) model.Farm); ok {
-		r0 = rf(input, ctx)
+	if rf, ok := ret.Get(0).(func(context.Context, usecase.GetUserFarmInputDto) model.Farm); ok {
+		r0 = rf(ctx, input)
 	} else {
 		r0 = ret.Get(0).(model.Farm)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(usecase.GetUserFarmInputDto, context.Context) error); ok {
-		r1 = rf(input, ctx)
+	if rf, ok := ret.Get(1).(func(context.Context, usecase.GetUserFarmInputDto) error); ok {
+		r1 = rf(ctx, input)
 	} else {
 		r1 = ret.Error(1)
 	}

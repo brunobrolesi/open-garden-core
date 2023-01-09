@@ -16,20 +16,20 @@ type CreateUserUseCase struct {
 	mock.Mock
 }
 
-// Exec provides a mock function with given fields: user, ctx
-func (_m *CreateUserUseCase) Exec(user usecase.CreateUserInputDto, ctx context.Context) (model.Token, error) {
-	ret := _m.Called(user, ctx)
+// Exec provides a mock function with given fields: ctx, user
+func (_m *CreateUserUseCase) Exec(ctx context.Context, user usecase.CreateUserInputDto) (model.Token, error) {
+	ret := _m.Called(ctx, user)
 
 	var r0 model.Token
-	if rf, ok := ret.Get(0).(func(usecase.CreateUserInputDto, context.Context) model.Token); ok {
-		r0 = rf(user, ctx)
+	if rf, ok := ret.Get(0).(func(context.Context, usecase.CreateUserInputDto) model.Token); ok {
+		r0 = rf(ctx, user)
 	} else {
 		r0 = ret.Get(0).(model.Token)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(usecase.CreateUserInputDto, context.Context) error); ok {
-		r1 = rf(user, ctx)
+	if rf, ok := ret.Get(1).(func(context.Context, usecase.CreateUserInputDto) error); ok {
+		r1 = rf(ctx, user)
 	} else {
 		r1 = ret.Error(1)
 	}

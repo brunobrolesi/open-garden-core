@@ -55,7 +55,7 @@ func TestGetUserFarmsHandler(t *testing.T) {
 		req.Header.Set("X-User-Id", "1")
 		testSuite.Sut.ServeHTTP(rr, req)
 
-		testSuite.GetUserFarmsUseCaseMock.AssertCalled(t, "Exec", 1, mock.Anything)
+		testSuite.GetUserFarmsUseCaseMock.AssertCalled(t, "Exec", mock.Anything, 1)
 	})
 	t.Run("Should return 500 and correct message if GetUserFarmsUseCase returns an no treated error", func(t *testing.T) {
 		testSuite := makeTestSuite()

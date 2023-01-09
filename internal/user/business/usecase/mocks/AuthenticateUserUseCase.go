@@ -16,20 +16,20 @@ type AuthenticateUserUseCase struct {
 	mock.Mock
 }
 
-// Exec provides a mock function with given fields: credentials, ctx
-func (_m *AuthenticateUserUseCase) Exec(credentials usecase.AuthenticateUserInputDto, ctx context.Context) (model.Token, error) {
-	ret := _m.Called(credentials, ctx)
+// Exec provides a mock function with given fields: ctx, credentials
+func (_m *AuthenticateUserUseCase) Exec(ctx context.Context, credentials usecase.AuthenticateUserInputDto) (model.Token, error) {
+	ret := _m.Called(ctx, credentials)
 
 	var r0 model.Token
-	if rf, ok := ret.Get(0).(func(usecase.AuthenticateUserInputDto, context.Context) model.Token); ok {
-		r0 = rf(credentials, ctx)
+	if rf, ok := ret.Get(0).(func(context.Context, usecase.AuthenticateUserInputDto) model.Token); ok {
+		r0 = rf(ctx, credentials)
 	} else {
 		r0 = ret.Get(0).(model.Token)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(usecase.AuthenticateUserInputDto, context.Context) error); ok {
-		r1 = rf(credentials, ctx)
+	if rf, ok := ret.Get(1).(func(context.Context, usecase.AuthenticateUserInputDto) error); ok {
+		r1 = rf(ctx, credentials)
 	} else {
 		r1 = ret.Error(1)
 	}

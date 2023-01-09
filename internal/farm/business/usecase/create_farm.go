@@ -15,7 +15,7 @@ type (
 	}
 
 	CreateFarmUseCase interface {
-		Exec(farm CreateFarmInputDto, ctx context.Context) (model.Farm, error)
+		Exec(ctx context.Context, farm CreateFarmInputDto) (model.Farm, error)
 	}
 
 	createFarm struct {
@@ -29,14 +29,14 @@ func NewCreateFarmUseCase(farmRepository gateway.FarmRepository) CreateFarmUseCa
 	}
 }
 
-func (c createFarm) Exec(farm CreateFarmInputDto, ctx context.Context) (model.Farm, error) {
+func (c createFarm) Exec(ctx context.Context, farm CreateFarmInputDto) (model.Farm, error) {
 	f := model.Farm{
 		Name:    farm.Name,
 		Owner:   farm.Owner,
 		Address: farm.Address,
 		Active:  true,
 	}
-	newFarm, err := c.FarmRepository.CreateFarm(f, ctx)
+	newFarm, err := c.FarmRepository.CreateFarm(ctx, f)
 
 	if err != nil {
 		return model.Farm{}, err

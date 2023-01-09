@@ -7,7 +7,7 @@ import (
 )
 
 type UserRepository interface {
-	CreateUser(model.User, context.Context) (model.User, error)
-	GetUserByEmail(string, context.Context) (model.User, error)
-	IsEmailInUse(string, context.Context) (bool, error)
+	CreateUser(context.Context, model.User) (model.User, error)
+	GetUserByEmail(context.Context, string) (model.User, error)
+	IsEmailInUse(context.Context, string) (bool, error)
 }

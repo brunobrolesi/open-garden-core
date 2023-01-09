@@ -31,15 +31,15 @@ func TestGetUserFarmsUseCase(t *testing.T) {
 		userId := 1
 		ctx := context.Background()
 		testSuite.FarmRepositoryMock.On("GetFarmsByUserId", mock.Anything, mock.Anything).Return(model.Farms{}, errors.New("any_error"))
-		testSuite.Sut.Exec(userId, ctx)
-		testSuite.FarmRepositoryMock.AssertCalled(t, "GetFarmsByUserId", userId, ctx)
+		testSuite.Sut.Exec(ctx, userId)
+		testSuite.FarmRepositoryMock.AssertCalled(t, "GetFarmsByUserId", ctx, userId)
 	})
 	t.Run("Should return an error if GetFarmsByUserId from FarmRepository returns an error", func(t *testing.T) {
 		testSuite := makeTestSuite()
 		userId := 1
 		ctx := context.Background()
 		testSuite.FarmRepositoryMock.On("GetFarmsByUserId", mock.Anything, mock.Anything).Return(model.Farms{}, errors.New("get_farms_error"))
-		result, err := testSuite.Sut.Exec(userId, ctx)
+		result, err := testSuite.Sut.Exec(ctx, userId)
 		assert.Empty(t, result)
 		assert.Error(t, err, "get_farms_error")
 	})
@@ -51,7 +51,7 @@ func TestGetUserFarmsUseCase(t *testing.T) {
 		testSuite := makeTestSuite()
 		ctx := context.Background()
 		testSuite.FarmRepositoryMock.On("GetFarmsByUserId", mock.Anything, mock.Anything).Return(expected, nil)
-		result, err := testSuite.Sut.Exec(1, ctx)
+		result, err := testSuite.Sut.Exec(ctx, 1)
 		assert.Equal(t, expected, result)
 		assert.Nil(t, err)
 	})

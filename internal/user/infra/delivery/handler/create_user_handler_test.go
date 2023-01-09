@@ -173,7 +173,7 @@ func TestCreateUserHandler(t *testing.T) {
 		req, _ := http.NewRequest(http.MethodPost, "/register", makeValidBody())
 		testSuite.Sut.ServeHTTP(rr, req)
 
-		testSuite.CreateUserUseCaseMock.AssertCalled(t, "Exec", user, mock.Anything)
+		testSuite.CreateUserUseCaseMock.AssertCalled(t, "Exec", mock.Anything, user)
 	})
 	t.Run("Should return 400 and correct message if CreateUserUseCase returns an ErrEmailInUse", func(t *testing.T) {
 		testSuite := makeTestSuite()

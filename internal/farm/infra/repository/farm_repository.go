@@ -25,12 +25,12 @@ func NewPostgresFarmRepository(conn *pgx.Conn) gateway.FarmRepository {
 	}
 }
 
-func (r postgresFarmRepository) CreateFarm(farm model.Farm, ctx context.Context) (model.Farm, error) {
+func (r postgresFarmRepository) CreateFarm(ctx context.Context, farm model.Farm) (model.Farm, error) {
 	err := r.conn.QueryRow(ctx, createFarmQuery, farm.Name, farm.Address, farm.Owner, farm.Active).Scan(&farm.Id)
 	return farm, err
 }
 
-func (r postgresFarmRepository) GetFarmsByUserId(userId int, ctx context.Context) (model.Farms, error) {
+func (r postgresFarmRepository) GetFarmsByUserId(ctx context.Context, userId int) (model.Farms, error) {
 	rows, err := r.conn.Query(ctx, getAllUserFarmsQuery, userId)
 
 	if !errors.Is(err, pgx.ErrNoRows) && err != nil {
@@ -54,7 +54,7 @@ func (r postgresFarmRepository) GetFarmsByUserId(userId int, ctx context.Context
 	return farms, nil
 }
 
-func (r postgresFarmRepository) GetFarmByIdAndUserId(id int, userId int, ctx context.Context) (model.Farm, error) {
+func (r postgresFarmRepository) GetFarmByIdAndUserId(ctx context.Context, id int, userId int) (model.Farm, error) {
 	farm := model.Farm{}
 	err := r.conn.QueryRow(ctx, getFarmByIdAndUserIdQuery, id, userId).Scan(&farm.Id, &farm.Name, &farm.Address, &farm.Owner, &farm.Active)
 

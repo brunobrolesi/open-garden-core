@@ -135,7 +135,7 @@ func TestCreateFarmHandler(t *testing.T) {
 		req.Header.Set("X-User-Id", "1")
 		testSuite.Sut.ServeHTTP(rr, req)
 
-		testSuite.CreateFarmUseCaseMock.AssertCalled(t, "Exec", farm, mock.Anything)
+		testSuite.CreateFarmUseCaseMock.AssertCalled(t, "Exec", mock.Anything, farm)
 	})
 	t.Run("Should return 500 and correct message if CreateFarmUseCase returns an no treated error", func(t *testing.T) {
 		testSuite := makeTestSuite()

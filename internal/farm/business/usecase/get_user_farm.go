@@ -14,7 +14,7 @@ type (
 	}
 
 	GetUserFarmUseCase interface {
-		Exec(input GetUserFarmInputDto, ctx context.Context) (model.Farm, error)
+		Exec(ctx context.Context, input GetUserFarmInputDto) (model.Farm, error)
 	}
 
 	getUserFarm struct {
@@ -28,8 +28,8 @@ func NewGetUserFarmUseCase(farmRepository gateway.FarmRepository) GetUserFarmUse
 	}
 }
 
-func (g getUserFarm) Exec(input GetUserFarmInputDto, ctx context.Context) (model.Farm, error) {
-	farm, err := g.FarmRepository.GetFarmByFarmIdAndUserId(input.FarmId, input.UserId, ctx)
+func (g getUserFarm) Exec(ctx context.Context, input GetUserFarmInputDto) (model.Farm, error) {
+	farm, err := g.FarmRepository.GetFarmByIdAndUserId(ctx, input.FarmId, input.UserId)
 
 	if err != nil {
 		return model.Farm{}, err

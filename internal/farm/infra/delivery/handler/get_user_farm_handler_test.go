@@ -72,7 +72,7 @@ func TestGetUserFarmHandler(t *testing.T) {
 			UserId: 1,
 			FarmId: 2,
 		}
-		testSuite.GetUserFarmUseCaseMock.AssertCalled(t, "Exec", expected, mock.Anything)
+		testSuite.GetUserFarmUseCaseMock.AssertCalled(t, "Exec", mock.Anything, expected)
 	})
 	t.Run("Should return 500 and correct message if GetUserFarmUseCaseMock returns an no treated error", func(t *testing.T) {
 		testSuite := makeTestSuite()

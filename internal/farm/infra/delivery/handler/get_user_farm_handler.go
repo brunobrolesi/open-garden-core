@@ -45,7 +45,7 @@ func (h getUserFarmHandler) Handle(c *gin.Context) {
 		UserId: userId,
 		FarmId: id,
 	}
-	result, err := h.GetUserFarmUseCase.Exec(i, c)
+	result, err := h.GetUserFarmUseCase.Exec(c, i)
 
 	if err != nil {
 		fmt.Println("ERROR", err.Error())

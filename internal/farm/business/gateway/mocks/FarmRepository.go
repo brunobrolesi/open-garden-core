@@ -16,18 +16,18 @@ type FarmRepository struct {
 }
 
 // CreateFarm provides a mock function with given fields: _a0, _a1
-func (_m *FarmRepository) CreateFarm(_a0 model.Farm, _a1 context.Context) (model.Farm, error) {
+func (_m *FarmRepository) CreateFarm(_a0 context.Context, _a1 model.Farm) (model.Farm, error) {
 	ret := _m.Called(_a0, _a1)
 
 	var r0 model.Farm
-	if rf, ok := ret.Get(0).(func(model.Farm, context.Context) model.Farm); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, model.Farm) model.Farm); ok {
 		r0 = rf(_a0, _a1)
 	} else {
 		r0 = ret.Get(0).(model.Farm)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(model.Farm, context.Context) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, model.Farm) error); ok {
 		r1 = rf(_a0, _a1)
 	} else {
 		r1 = ret.Error(1)
@@ -36,20 +36,20 @@ func (_m *FarmRepository) CreateFarm(_a0 model.Farm, _a1 context.Context) (model
 	return r0, r1
 }
 
-// GetFarmByFarmIdAndUserId provides a mock function with given fields: _a0, _a1, _a2
-func (_m *FarmRepository) GetFarmByFarmIdAndUserId(_a0 int, _a1 int, _a2 context.Context) (model.Farm, error) {
-	ret := _m.Called(_a0, _a1, _a2)
+// GetFarmByIdAndUserId provides a mock function with given fields: ctx, farmId, userId
+func (_m *FarmRepository) GetFarmByIdAndUserId(ctx context.Context, farmId int, userId int) (model.Farm, error) {
+	ret := _m.Called(ctx, farmId, userId)
 
 	var r0 model.Farm
-	if rf, ok := ret.Get(0).(func(int, int, context.Context) model.Farm); ok {
-		r0 = rf(_a0, _a1, _a2)
+	if rf, ok := ret.Get(0).(func(context.Context, int, int) model.Farm); ok {
+		r0 = rf(ctx, farmId, userId)
 	} else {
 		r0 = ret.Get(0).(model.Farm)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(int, int, context.Context) error); ok {
-		r1 = rf(_a0, _a1, _a2)
+	if rf, ok := ret.Get(1).(func(context.Context, int, int) error); ok {
+		r1 = rf(ctx, farmId, userId)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -58,11 +58,11 @@ func (_m *FarmRepository) GetFarmByFarmIdAndUserId(_a0 int, _a1 int, _a2 context
 }
 
 // GetFarmsByUserId provides a mock function with given fields: _a0, _a1
-func (_m *FarmRepository) GetFarmsByUserId(_a0 int, _a1 context.Context) (model.Farms, error) {
+func (_m *FarmRepository) GetFarmsByUserId(_a0 context.Context, _a1 int) (model.Farms, error) {
 	ret := _m.Called(_a0, _a1)
 
 	var r0 model.Farms
-	if rf, ok := ret.Get(0).(func(int, context.Context) model.Farms); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int) model.Farms); ok {
 		r0 = rf(_a0, _a1)
 	} else {
 		if ret.Get(0) != nil {
@@ -71,7 +71,7 @@ func (_m *FarmRepository) GetFarmsByUserId(_a0 int, _a1 context.Context) (model.
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(int, context.Context) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, int) error); ok {
 		r1 = rf(_a0, _a1)
 	} else {
 		r1 = ret.Error(1)
