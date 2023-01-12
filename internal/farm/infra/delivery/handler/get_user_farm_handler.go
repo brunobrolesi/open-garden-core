@@ -55,7 +55,7 @@ func (h getUserFarmHandler) Handle(c *gin.Context) {
 		return
 	}
 
-	if result.IdIsEmpty() {
+	if result.IsEmpty() {
 		c.JSON(http.StatusNoContent, nil)
 		return
 	}

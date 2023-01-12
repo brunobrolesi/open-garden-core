@@ -1,5 +1,7 @@
 package model
 
+import "reflect"
+
 type Farm struct {
 	Id      int    `json:"id"`
 	Name    string `json:"name"`
@@ -10,6 +12,6 @@ type Farm struct {
 
 type Farms []Farm
 
-func (f *Farm) IdIsEmpty() bool {
-	return f.Id == 0
+func (f Farm) IsEmpty() bool {
+	return reflect.DeepEqual(f, Farm{})
 }
