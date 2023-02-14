@@ -9,7 +9,8 @@ import (
 
 type (
 	AddFarmSensorInputDto struct {
-		SensorId    int
+		Name        string
+		SensorModel int
 		Description string
 		FarmId      int
 		UserId      int
@@ -35,7 +36,7 @@ func NewAddFarmSensorUseCase(sensorRepository gateway.SensorRepository, farmRepo
 }
 
 func (a addFarmSensor) Exec(ctx context.Context, input AddFarmSensorInputDto) (model.FarmSensor, error) {
-	s, err := a.SensorRepository.GetSensorById(ctx, input.SensorId)
+	s, err := a.SensorRepository.GetSensorById(ctx, input.SensorModel)
 
 	if err != nil {
 		return model.FarmSensor{}, err
@@ -48,7 +49,8 @@ func (a addFarmSensor) Exec(ctx context.Context, input AddFarmSensorInputDto) (m
 	}
 
 	fs := model.FarmSensor{
-		SensorId:    s.Id,
+		Name:        input.Name,
+		SensorModel: s.Id,
 		FarmId:      f.Id,
 		Description: input.Description,
 		Active:      true,

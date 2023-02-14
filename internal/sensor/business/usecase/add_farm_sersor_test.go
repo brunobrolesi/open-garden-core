@@ -34,7 +34,7 @@ func TestAddFarmSensor(t *testing.T) {
 	}
 	makeAddFarmSensorInputDto := func() usecase.AddFarmSensorInputDto {
 		return usecase.AddFarmSensorInputDto{
-			SensorId:    1,
+			SensorModel: 1,
 			Description: "valid_description",
 			FarmId:      2,
 			UserId:      3,
@@ -65,7 +65,7 @@ func TestAddFarmSensor(t *testing.T) {
 		input := makeAddFarmSensorInputDto()
 		testSuite.Sut.Exec(ctx, input)
 
-		testSuite.SensorRepositoryMock.AssertCalled(t, "GetSensorById", ctx, input.SensorId)
+		testSuite.SensorRepositoryMock.AssertCalled(t, "GetSensorById", ctx, input.SensorModel)
 	})
 	t.Run("Should return an error if GetSensorById from SensorRepository return an error", func(t *testing.T) {
 		testSuite := makeTestSuite()
@@ -114,7 +114,7 @@ func TestAddFarmSensor(t *testing.T) {
 		testSuite.Sut.Exec(ctx, input)
 
 		expectedInput := model.FarmSensor{
-			SensorId:    sensor.Id,
+			SensorModel: sensor.Id,
 			FarmId:      farm.Id,
 			Description: input.Description,
 			Active:      true,
@@ -143,7 +143,7 @@ func TestAddFarmSensor(t *testing.T) {
 		farm := makeFarm()
 		farmSensor := model.FarmSensor{
 			Id:          4,
-			SensorId:    sensor.Id,
+			SensorModel: sensor.Id,
 			FarmId:      farm.Id,
 			Description: input.Description,
 			Active:      true,
