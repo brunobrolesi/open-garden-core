@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:15.1
+    container_name: db
+    restart: always
+    tty: true
+    volumes:
+      - ./db/dump:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    networks:
+      - dockernet
+    ports:
+      - 5432:5432
+
+  app:
+    build: 
+      context: .
+    container_name: app
+    entrypoint: wait-for db:5432 -t 20  -- ./open_garden_core 
+    networks:
+      - dockernet
+    tty: true
+    depends_on:
+      - db
+    ports:
+      - 8080:8080
+
+networks:
+  dockernet:
+    driver: bridge
