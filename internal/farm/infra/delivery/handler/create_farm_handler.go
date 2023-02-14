@@ -1,9 +1,7 @@
 package handler
 
 import (
-	"errors"
 	"net/http"
-	"strings"
 
 	"github.com/brunobrolesi/open-garden-core/internal/farm/business/usecase"
 	"github.com/brunobrolesi/open-garden-core/internal/shared"
@@ -16,8 +14,8 @@ type (
 	}
 
 	createFarmBodyRequest struct {
-		Name    string `json:"name"`
-		Address string `json:"address"`
+		Name    string `json:"name" validate:"required,min=3,max=150"`
+		Address string `json:"address" validate:"required,min=3,max=255"`
 	}
 )
 
@@ -46,7 +44,8 @@ func (h createFarmHandler) Handle(c *gin.Context) {
 		return
 	}
 
-	if err := body.Validate(); err != nil {
+	validator := shared.GetValidator()
+	if err := validator.Struct(body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
@@ -71,16 +70,4 @@ func (h createFarmHandler) Handle(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{
 		"data": result,
 	})
-}
-
-func (b *createFarmBodyRequest) Validate() error {
-	if strings.TrimSpace(b.Name) == "" {
-		return errors.New("name can't be empty")
-	}
-
-	if strings.TrimSpace(b.Address) == "" {
-		return errors.New("address can't be empty")
-	}
-
-	return nil
 }

@@ -64,20 +64,20 @@ func TestCreateFarmHandler(t *testing.T) {
 			{
 				InvalidBody: bytes.NewBuffer([]byte(`
 				{
-					"name": "  ",
+					"name": "a",
 					"address": "valid_address"
 				}
 			`)),
-				ExpectedResponseBody: `{"error":"name can't be empty"}`,
+				ExpectedResponseBody: `{"error":"Key: 'createFarmBodyRequest.Name' Error:Field validation for 'Name' failed on the 'min' tag"}`,
 			},
 			{
 				InvalidBody: bytes.NewBuffer([]byte(`
 				{
 					"name": "valid_name",
-					"address": "   "
+					"address": "a"
 				}
 			`)),
-				ExpectedResponseBody: `{"error":"address can't be empty"}`,
+				ExpectedResponseBody: `{"error":"Key: 'createFarmBodyRequest.Address' Error:Field validation for 'Address' failed on the 'min' tag"}`,
 			},
 		}
 	}

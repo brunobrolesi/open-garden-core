@@ -68,7 +68,7 @@ func TestAuthenticateUserHandler(t *testing.T) {
 					"password": "valid_password"
 				}
 			`)),
-				ExpectedResponseBody: `{"error":"email can't be empty"}`,
+				ExpectedResponseBody: `{"error":"Key: 'authenticateUserBodyRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag"}`,
 			},
 			{
 				InvalidBody: bytes.NewBuffer([]byte(`
@@ -77,7 +77,7 @@ func TestAuthenticateUserHandler(t *testing.T) {
 					"password": "valid_password"
 				}
 			`)),
-				ExpectedResponseBody: `{"error":"email must be a valid format"}`,
+				ExpectedResponseBody: `{"error":"Key: 'authenticateUserBodyRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag"}`,
 			},
 			{
 				InvalidBody: bytes.NewBuffer([]byte(`
@@ -86,7 +86,7 @@ func TestAuthenticateUserHandler(t *testing.T) {
 					"password": "    "
 				}
 			`)),
-				ExpectedResponseBody: `{"error":"password can't be empty"}`,
+				ExpectedResponseBody: `{"error":"Key: 'authenticateUserBodyRequest.Password' Error:Field validation for 'Password' failed on the 'min' tag"}`,
 			},
 		}
 	}

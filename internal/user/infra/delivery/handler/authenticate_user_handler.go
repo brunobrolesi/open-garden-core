@@ -3,8 +3,6 @@ package handler
 import (
 	"errors"
 	"net/http"
-	"regexp"
-	"strings"
 
 	"github.com/brunobrolesi/open-garden-core/internal/shared"
 	"github.com/brunobrolesi/open-garden-core/internal/user/business/model"
@@ -18,8 +16,8 @@ type (
 	}
 
 	authenticateUserBodyRequest struct {
-		Email    string `json:"email"`
-		Password string `json:"password"`
+		Email    string `json:"email" validate:"required,email,max=150"`
+		Password string `json:"password" validate:"required,min=6"`
 	}
 )
 
@@ -39,7 +37,8 @@ func (h authenticateUserHandler) Handle(c *gin.Context) {
 		return
 	}
 
-	if err := body.Validate(); err != nil {
+	validator := shared.GetValidator()
+	if err := validator.Struct(body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
@@ -70,22 +69,4 @@ func (h authenticateUserHandler) Handle(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"token": token,
 	})
-}
-
-func (b *authenticateUserBodyRequest) Validate() error {
-	if strings.TrimSpace(b.Email) == "" {
-		return errors.New("email can't be empty")
-	}
-
-	emailRegex := regexp.MustCompile("^[\\w!#$%&’*+/=?`{|}~^-]+(?:\\.[\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")
-
-	if !emailRegex.MatchString(b.Email) {
-		return errors.New("email must be a valid format")
-	}
-
-	if strings.TrimSpace(b.Password) == "" {
-		return errors.New("password can't be empty")
-	}
-
-	return nil
 }

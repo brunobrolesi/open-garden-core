@@ -68,13 +68,13 @@ func TestCreateUserHandler(t *testing.T) {
 			{
 				InvalidBody: bytes.NewBuffer([]byte(`
 				{
-					"company_name": "   ",
+					"company_name": "a",
 					"email": "valid@mail.com",
 					"password": "valid_password",
 					"confirm_password": "valid_password"
 				}
 			`)),
-				ExpectedResponseBody: `{"error":"company_name can't be empty"}`,
+				ExpectedResponseBody: `{"error":"Key: 'createUserBodyRequest.CompanyName' Error:Field validation for 'CompanyName' failed on the 'min' tag"}`,
 			},
 			{
 				InvalidBody: bytes.NewBuffer([]byte(`
@@ -85,7 +85,7 @@ func TestCreateUserHandler(t *testing.T) {
 					"confirm_password": "valid_password"
 				}
 			`)),
-				ExpectedResponseBody: `{"error":"email can't be empty"}`,
+				ExpectedResponseBody: `{"error":"Key: 'createUserBodyRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag"}`,
 			},
 			{
 				InvalidBody: bytes.NewBuffer([]byte(`
@@ -96,7 +96,7 @@ func TestCreateUserHandler(t *testing.T) {
 					"confirm_password": "valid_password"
 				}
 			`)),
-				ExpectedResponseBody: `{"error":"email must be a valid format"}`,
+				ExpectedResponseBody: `{"error":"Key: 'createUserBodyRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag"}`,
 			},
 			{
 				InvalidBody: bytes.NewBuffer([]byte(`
@@ -107,7 +107,7 @@ func TestCreateUserHandler(t *testing.T) {
 					"confirm_password": "valid_password"
 				}
 			`)),
-				ExpectedResponseBody: `{"error":"password can't be empty"}`,
+				ExpectedResponseBody: `{"error":"Key: 'createUserBodyRequest.Password' Error:Field validation for 'Password' failed on the 'min' tag\nKey: 'createUserBodyRequest.ConfirmPassword' Error:Field validation for 'ConfirmPassword' failed on the 'eqfield' tag"}`,
 			},
 			{
 				InvalidBody: bytes.NewBuffer([]byte(`
@@ -118,7 +118,7 @@ func TestCreateUserHandler(t *testing.T) {
 					"confirm_password": "  "
 				}
 			`)),
-				ExpectedResponseBody: `{"error":"confirm_password can't be empty"}`,
+				ExpectedResponseBody: `{"error":"Key: 'createUserBodyRequest.ConfirmPassword' Error:Field validation for 'ConfirmPassword' failed on the 'min' tag"}`,
 			},
 			{
 				InvalidBody: bytes.NewBuffer([]byte(`
@@ -129,7 +129,7 @@ func TestCreateUserHandler(t *testing.T) {
 					"confirm_password": "no_match"
 				}
 			`)),
-				ExpectedResponseBody: `{"error":"passwords must be equal"}`,
+				ExpectedResponseBody: `{"error":"Key: 'createUserBodyRequest.ConfirmPassword' Error:Field validation for 'ConfirmPassword' failed on the 'eqfield' tag"}`,
 			},
 		}
 	}
