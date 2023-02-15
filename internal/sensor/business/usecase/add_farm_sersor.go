@@ -42,10 +42,18 @@ func (a addFarmSensor) Exec(ctx context.Context, input AddFarmSensorInputDto) (m
 		return model.FarmSensor{}, err
 	}
 
+	if s.IsEmpty() {
+		return model.FarmSensor{}, model.ErrInvalidSensor
+	}
+
 	f, err := a.FarmRepository.GetFarmByIdAndUserId(ctx, input.FarmId, input.UserId)
 
 	if err != nil {
 		return model.FarmSensor{}, err
+	}
+
+	if f.IsEmpty() {
+		return model.FarmSensor{}, model.ErrInvalidFarm
 	}
 
 	fs := model.FarmSensor{

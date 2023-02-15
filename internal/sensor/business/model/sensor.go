@@ -1,5 +1,7 @@
 package model
 
+import "reflect"
+
 type (
 	SensorType string
 )
@@ -16,4 +18,8 @@ type Sensor struct {
 	Name string
 	Type SensorType
 	Unit string
+}
+
+func (s Sensor) IsEmpty() bool {
+	return reflect.DeepEqual(s, Sensor{})
 }
