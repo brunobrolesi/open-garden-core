@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func UserRouter(r *gin.Engine) *gin.RouterGroup {
+func FarmRouter(r *gin.Engine) *gin.RouterGroup {
 	user := r.Group("/farms")
 	{
 		user.POST("/", factory.AuthMiddlewareFactory().Handle, factory.CreateFarmFactory().Handle)
