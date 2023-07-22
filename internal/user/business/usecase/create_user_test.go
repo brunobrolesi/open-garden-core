@@ -53,7 +53,7 @@ func TestCreateUserUseCase(t *testing.T) {
 		testSuite.UserRepositoryMock.On("IsEmailInUse", mock.Anything, mock.Anything).Return(false, errors.New("is_email_in_use_error"))
 		token, err := testSuite.Sut.Exec(context.Background(), user)
 		assert.Empty(t, token)
-		assert.Error(t, err, "is_email_in_use_error")
+		assert.EqualError(t, err, "is_email_in_use_error")
 	})
 	t.Run("Should return an error if email is in use", func(t *testing.T) {
 		testSuite := makeTestSuite()
@@ -61,7 +61,7 @@ func TestCreateUserUseCase(t *testing.T) {
 		testSuite.UserRepositoryMock.On("IsEmailInUse", mock.Anything, mock.Anything).Return(true, nil)
 		token, err := testSuite.Sut.Exec(context.Background(), user)
 		assert.Empty(t, token)
-		assert.Error(t, err, model.ErrEmailInUse.Error())
+		assert.EqualError(t, err, model.ErrEmailInUse.Error())
 	})
 	t.Run("Should call GenerateHash from HashService with correct value", func(t *testing.T) {
 		testSuite := makeTestSuite()
@@ -79,7 +79,7 @@ func TestCreateUserUseCase(t *testing.T) {
 		user := makeCreateUserInputDto()
 		token, err := testSuite.Sut.Exec(context.Background(), user)
 		assert.Empty(t, token)
-		assert.Error(t, err, "hash_error")
+		assert.EqualError(t, err, "hash_error")
 	})
 	t.Run("Should call CreateUser from UserRepository with correct values", func(t *testing.T) {
 		testSuite := makeTestSuite()
@@ -105,7 +105,7 @@ func TestCreateUserUseCase(t *testing.T) {
 		testSuite.UserRepositoryMock.On("CreateUser", mock.Anything, mock.Anything).Return(model.User{}, errors.New("user_repository_error"))
 		token, err := testSuite.Sut.Exec(context.Background(), user)
 		assert.Empty(t, token)
-		assert.Error(t, err, "user_repository_error")
+		assert.EqualError(t, err, "user_repository_error")
 	})
 	t.Run("Should call GenerateToken from TokenService with correct values", func(t *testing.T) {
 		testSuite := makeTestSuite()
@@ -138,7 +138,7 @@ func TestCreateUserUseCase(t *testing.T) {
 		testSuite.TokenServiceMock.On("GenerateToken", mock.Anything).Return(model.Token(""), errors.New("token_error"))
 		token, err := testSuite.Sut.Exec(context.Background(), makeCreateUserInputDto())
 		assert.Empty(t, token)
-		assert.Error(t, err, "token_error")
+		assert.EqualError(t, err, "token_error")
 	})
 	t.Run("Should return a token on success", func(t *testing.T) {
 		testSuite := makeTestSuite()

@@ -76,7 +76,7 @@ func TestAddFarmSensor(t *testing.T) {
 		result, err := testSuite.Sut.Exec(ctx, input)
 
 		assert.Empty(t, result)
-		assert.Error(t, err, "get_sensor_error")
+		assert.EqualError(t, err, "get_sensor_error")
 	})
 	t.Run("Should return ErrInvalidSensor if GetSensorById from SensorRepository return empty sensor", func(t *testing.T) {
 		testSuite := makeTestSuite()
@@ -87,7 +87,7 @@ func TestAddFarmSensor(t *testing.T) {
 		result, err := testSuite.Sut.Exec(ctx, input)
 
 		assert.Empty(t, result)
-		assert.Error(t, err, model.ErrInvalidSensor.Error())
+		assert.EqualError(t, err, model.ErrInvalidSensor.Error())
 	})
 	t.Run("Should call GetFarmByIdAndUserId from FarmRepository with correct id", func(t *testing.T) {
 		testSuite := makeTestSuite()
@@ -110,7 +110,7 @@ func TestAddFarmSensor(t *testing.T) {
 		result, err := testSuite.Sut.Exec(ctx, input)
 
 		assert.Empty(t, result)
-		assert.Error(t, err, "get_farm_error")
+		assert.EqualError(t, err, "get_farm_error")
 	})
 	t.Run("Should return ErrInvalidFarm if GetFarmByIdAndUserId from FarmRepository return empty farm", func(t *testing.T) {
 		testSuite := makeTestSuite()
@@ -122,7 +122,7 @@ func TestAddFarmSensor(t *testing.T) {
 		result, err := testSuite.Sut.Exec(ctx, input)
 
 		assert.Empty(t, result)
-		assert.Error(t, err, model.ErrInvalidFarm.Error())
+		assert.EqualError(t, err, model.ErrInvalidFarm.Error())
 	})
 	t.Run("Should call CreateFarmSensor from FarmSensorRepository with correct id", func(t *testing.T) {
 		testSuite := makeTestSuite()
@@ -156,7 +156,7 @@ func TestAddFarmSensor(t *testing.T) {
 		result, err := testSuite.Sut.Exec(ctx, input)
 
 		assert.Empty(t, result)
-		assert.Error(t, err, "create_farm_sensor_error")
+		assert.EqualError(t, err, "create_farm_sensor_error")
 	})
 	t.Run("Should return a Farm Sensor on success", func(t *testing.T) {
 		testSuite := makeTestSuite()

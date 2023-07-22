@@ -54,7 +54,7 @@ func TestCreateFarmUseCase(t *testing.T) {
 		testSuite.FarmRepositoryMock.On("CreateFarm", mock.Anything, mock.Anything).Return(model.Farm{}, errors.New("create_farm_error"))
 		result, err := testSuite.Sut.Exec(ctx, farm)
 		assert.Empty(t, result)
-		assert.Error(t, err, "create_farm_error")
+		assert.EqualError(t, err, "create_farm_error")
 	})
 	t.Run("Should return a farm on success", func(t *testing.T) {
 		testSuite := makeTestSuite()

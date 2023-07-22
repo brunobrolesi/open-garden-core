@@ -41,7 +41,7 @@ func TestGetUserFarmsUseCase(t *testing.T) {
 		testSuite.FarmRepositoryMock.On("GetFarmsByUserId", mock.Anything, mock.Anything).Return(model.Farms{}, errors.New("get_farms_error"))
 		result, err := testSuite.Sut.Exec(ctx, userId)
 		assert.Empty(t, result)
-		assert.Error(t, err, "get_farms_error")
+		assert.EqualError(t, err, "get_farms_error")
 	})
 	t.Run("Should return a farms on success", func(t *testing.T) {
 		expected := model.Farms{

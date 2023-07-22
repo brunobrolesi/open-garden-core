@@ -61,7 +61,7 @@ func TestAuthenticateUserUseCase(t *testing.T) {
 		credentials := makeAuthenticateUserInputDto()
 		token, err := testSuite.Sut.Exec(context.Background(), credentials)
 		assert.Empty(t, token)
-		assert.Error(t, err, "user_repository_error")
+		assert.EqualError(t, err, "user_repository_error")
 	})
 	t.Run("Should return ErrAuthentication if user not exists", func(t *testing.T) {
 		testSuite := makeTestSuite()
@@ -69,7 +69,7 @@ func TestAuthenticateUserUseCase(t *testing.T) {
 		credentials := makeAuthenticateUserInputDto()
 		token, err := testSuite.Sut.Exec(context.Background(), credentials)
 		assert.Empty(t, token)
-		assert.Error(t, err, model.ErrAuthentication.Error())
+		assert.EqualError(t, err, model.ErrAuthentication.Error())
 	})
 	t.Run("Should call CompareStringAndHash from HashService with correct values", func(t *testing.T) {
 		testSuite := makeTestSuite()
@@ -88,7 +88,7 @@ func TestAuthenticateUserUseCase(t *testing.T) {
 		testSuite.HashServiceMock.On("CompareStringAndHash", mock.Anything, mock.Anything).Return(errors.New("hash_service_error"))
 		token, err := testSuite.Sut.Exec(ctx, credentials)
 		assert.Empty(t, token)
-		assert.Error(t, err, "hash_service_error")
+		assert.EqualError(t, err, "invalid email or password")
 	})
 	t.Run("Should call GenerateToken from TokenService with correct values", func(t *testing.T) {
 		testSuite := makeTestSuite()
@@ -109,7 +109,7 @@ func TestAuthenticateUserUseCase(t *testing.T) {
 		testSuite.TokenServiceMock.On("GenerateToken", mock.Anything).Return(model.Token(""), errors.New("token_service_error"))
 		token, err := testSuite.Sut.Exec(ctx, credentials)
 		assert.Empty(t, token)
-		assert.Error(t, err, "token_service_error")
+		assert.EqualError(t, err, "token_service_error")
 
 	})
 	t.Run("Should return a token on success", func(t *testing.T) {
