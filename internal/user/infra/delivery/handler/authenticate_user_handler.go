@@ -12,7 +12,7 @@ import (
 
 type (
 	authenticateUserHandler struct {
-		AuthenticateUserUseCase usecase.AuthenticateUserUseCase
+		authenticateUserUseCase usecase.AuthenticateUserUseCase
 	}
 
 	authenticateUserBodyRequest struct {
@@ -23,7 +23,7 @@ type (
 
 func NewAuthenticateUserHandler(u usecase.AuthenticateUserUseCase) Handler {
 	return authenticateUserHandler{
-		AuthenticateUserUseCase: u,
+		authenticateUserUseCase: u,
 	}
 }
 
@@ -50,7 +50,7 @@ func (h authenticateUserHandler) Handle(c *gin.Context) {
 		Password: body.Password,
 	}
 
-	token, err := h.AuthenticateUserUseCase.Exec(c, credentials)
+	token, err := h.authenticateUserUseCase.Exec(c, credentials)
 
 	if errors.Is(err, model.ErrAuthentication) {
 		c.JSON(http.StatusUnauthorized, gin.H{

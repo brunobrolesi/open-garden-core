@@ -6,18 +6,18 @@ import (
 )
 
 type bcryptHashService struct {
-	HashCost int
+	hashCost int
 }
 
 func NewBcryptHashService(hashCoast int) gateway.HashService {
 	return bcryptHashService{
-		HashCost: hashCoast,
+		hashCost: hashCoast,
 	}
 }
 
 func (b bcryptHashService) GenerateHash(s string) (gateway.Hash, error) {
 	bytes := []byte(s)
-	hash, err := bcrypt.GenerateFromPassword(bytes, b.HashCost)
+	hash, err := bcrypt.GenerateFromPassword(bytes, b.hashCost)
 
 	if err != nil {
 		return "", err

@@ -10,13 +10,13 @@ import (
 
 type (
 	getUserFarmsHandler struct {
-		GetUserFarmsUseCase usecase.GetUserFarmsUseCase
+		getUserFarmsUseCase usecase.GetUserFarmsUseCase
 	}
 )
 
 func NewGetUserFarmsHandler(u usecase.GetUserFarmsUseCase) Handler {
 	return getUserFarmsHandler{
-		GetUserFarmsUseCase: u,
+		getUserFarmsUseCase: u,
 	}
 }
 
@@ -30,7 +30,7 @@ func (h getUserFarmsHandler) Handle(c *gin.Context) {
 		return
 	}
 
-	result, err := h.GetUserFarmsUseCase.Exec(c, userId)
+	result, err := h.getUserFarmsUseCase.Exec(c, userId)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

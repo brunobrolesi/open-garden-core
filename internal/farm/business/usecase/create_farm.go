@@ -19,13 +19,13 @@ type (
 	}
 
 	createFarm struct {
-		FarmRepository gateway.FarmRepository
+		farmRepository gateway.FarmRepository
 	}
 )
 
 func NewCreateFarmUseCase(farmRepository gateway.FarmRepository) CreateFarmUseCase {
 	return createFarm{
-		FarmRepository: farmRepository,
+		farmRepository: farmRepository,
 	}
 }
 
@@ -36,7 +36,7 @@ func (c createFarm) Exec(ctx context.Context, farm CreateFarmInputDto) (model.Fa
 		Address: farm.Address,
 		Active:  true,
 	}
-	newFarm, err := c.FarmRepository.CreateFarm(ctx, f)
+	newFarm, err := c.farmRepository.CreateFarm(ctx, f)
 
 	if err != nil {
 		return model.Farm{}, err

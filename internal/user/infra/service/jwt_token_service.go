@@ -10,12 +10,12 @@ import (
 )
 
 type jwtTokenService struct {
-	Secret string
+	secret string
 }
 
 func NewJwtTokenService(secret string) gateway.TokenService {
 	return jwtTokenService{
-		Secret: secret,
+		secret: secret,
 	}
 }
 
@@ -28,7 +28,7 @@ func (s jwtTokenService) GenerateToken(userId int) (model.Token, error) {
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	tokenString, err := token.SignedString([]byte(s.Secret))
+	tokenString, err := token.SignedString([]byte(s.secret))
 
 	if err != nil {
 		return "", err

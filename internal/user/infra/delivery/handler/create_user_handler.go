@@ -12,7 +12,7 @@ import (
 
 type (
 	createUserHandler struct {
-		CreateUserUseCase usecase.CreateUserUseCase
+		createUserUseCase usecase.CreateUserUseCase
 	}
 
 	createUserBodyRequest struct {
@@ -25,7 +25,7 @@ type (
 
 func NewCreateUserHandler(u usecase.CreateUserUseCase) Handler {
 	return createUserHandler{
-		CreateUserUseCase: u,
+		createUserUseCase: u,
 	}
 }
 
@@ -53,7 +53,7 @@ func (h createUserHandler) Handle(c *gin.Context) {
 		Password:    body.Password,
 	}
 
-	token, err := h.CreateUserUseCase.Exec(c, user)
+	token, err := h.createUserUseCase.Exec(c, user)
 
 	if errors.Is(err, model.ErrEmailInUse) {
 		c.JSON(http.StatusBadRequest, gin.H{

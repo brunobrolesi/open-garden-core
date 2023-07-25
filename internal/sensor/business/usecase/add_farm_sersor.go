@@ -21,22 +21,22 @@ type (
 	}
 
 	addFarmSensor struct {
-		SensorRepository     gateway.SensorRepository
-		FarmService          gateway.FarmService
-		FarmSensorRepository gateway.FarmSensorRepository
+		sensorRepository     gateway.SensorRepository
+		sarmService          gateway.FarmService
+		farmSensorRepository gateway.FarmSensorRepository
 	}
 )
 
 func NewAddFarmSensorUseCase(sensorRepository gateway.SensorRepository, farmService gateway.FarmService, farmSensorRepository gateway.FarmSensorRepository) AddFarmSensorUseCase {
 	return addFarmSensor{
-		SensorRepository:     sensorRepository,
-		FarmService:          farmService,
-		FarmSensorRepository: farmSensorRepository,
+		sensorRepository:     sensorRepository,
+		sarmService:          farmService,
+		farmSensorRepository: farmSensorRepository,
 	}
 }
 
 func (a addFarmSensor) Exec(ctx context.Context, input AddFarmSensorInputDto) (model.FarmSensor, error) {
-	s, err := a.SensorRepository.GetSensorById(ctx, input.SensorModel)
+	s, err := a.sensorRepository.GetSensorById(ctx, input.SensorModel)
 
 	if err != nil {
 		return model.FarmSensor{}, err
@@ -46,7 +46,7 @@ func (a addFarmSensor) Exec(ctx context.Context, input AddFarmSensorInputDto) (m
 		return model.FarmSensor{}, model.ErrInvalidSensor
 	}
 
-	f, err := a.FarmService.GetFarmByIdAndUserId(ctx, input.FarmId, input.UserId)
+	f, err := a.sarmService.GetFarmByIdAndUserId(ctx, input.FarmId, input.UserId)
 
 	if err != nil {
 		return model.FarmSensor{}, err
@@ -64,7 +64,7 @@ func (a addFarmSensor) Exec(ctx context.Context, input AddFarmSensorInputDto) (m
 		Active:      true,
 	}
 
-	newFarmSensor, err := a.FarmSensorRepository.CreateFarmSensor(ctx, fs)
+	newFarmSensor, err := a.farmSensorRepository.CreateFarmSensor(ctx, fs)
 
 	if err != nil {
 		return model.FarmSensor{}, err

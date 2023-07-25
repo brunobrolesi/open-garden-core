@@ -18,18 +18,18 @@ type (
 	}
 
 	getUserFarm struct {
-		FarmRepository gateway.FarmRepository
+		farmRepository gateway.FarmRepository
 	}
 )
 
 func NewGetUserFarmUseCase(farmRepository gateway.FarmRepository) GetUserFarmUseCase {
 	return getUserFarm{
-		FarmRepository: farmRepository,
+		farmRepository: farmRepository,
 	}
 }
 
 func (g getUserFarm) Exec(ctx context.Context, input GetUserFarmInputDto) (model.Farm, error) {
-	farm, err := g.FarmRepository.GetFarmByIdAndUserId(ctx, input.FarmId, input.UserId)
+	farm, err := g.farmRepository.GetFarmByIdAndUserId(ctx, input.FarmId, input.UserId)
 
 	if err != nil {
 		return model.Farm{}, err

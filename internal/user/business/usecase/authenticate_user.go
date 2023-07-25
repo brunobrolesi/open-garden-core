@@ -18,22 +18,22 @@ type (
 	}
 
 	authenticateUser struct {
-		HashService    gateway.HashService
-		UserRepository gateway.UserRepository
-		TokenService   gateway.TokenService
+		hashService    gateway.HashService
+		userRepository gateway.UserRepository
+		tokenService   gateway.TokenService
 	}
 )
 
 func NewAuthenticateUserUseCase(hashService gateway.HashService, userRepository gateway.UserRepository, tokenService gateway.TokenService) AuthenticateUserUseCase {
 	return authenticateUser{
-		HashService:    hashService,
-		UserRepository: userRepository,
-		TokenService:   tokenService,
+		hashService:    hashService,
+		userRepository: userRepository,
+		tokenService:   tokenService,
 	}
 }
 
 func (a authenticateUser) Exec(ctx context.Context, credentials AuthenticateUserInputDto) (model.Token, error) {
-	user, err := a.UserRepository.GetUserByEmail(ctx, credentials.Email)
+	user, err := a.userRepository.GetUserByEmail(ctx, credentials.Email)
 
 	if err != nil {
 		return "", err
@@ -43,11 +43,11 @@ func (a authenticateUser) Exec(ctx context.Context, credentials AuthenticateUser
 		return "", model.ErrAuthentication
 	}
 
-	if err := a.HashService.CompareStringAndHash(credentials.Password, user.Password); err != nil {
+	if err := a.hashService.CompareStringAndHash(credentials.Password, user.Password); err != nil {
 		return "", model.ErrAuthentication
 	}
 
-	token, err := a.TokenService.GenerateToken(user.Id)
+	token, err := a.tokenService.GenerateToken(user.Id)
 
 	if err != nil {
 		return "", err

@@ -12,13 +12,13 @@ import (
 
 type (
 	getUserFarmHandler struct {
-		GetUserFarmUseCase usecase.GetUserFarmUseCase
+		getUserFarmUseCase usecase.GetUserFarmUseCase
 	}
 )
 
 func NewGetUserFarmHandler(u usecase.GetUserFarmUseCase) Handler {
 	return getUserFarmHandler{
-		GetUserFarmUseCase: u,
+		getUserFarmUseCase: u,
 	}
 }
 
@@ -45,7 +45,7 @@ func (h getUserFarmHandler) Handle(c *gin.Context) {
 		UserId: userId,
 		FarmId: id,
 	}
-	result, err := h.GetUserFarmUseCase.Exec(c, i)
+	result, err := h.getUserFarmUseCase.Exec(c, i)
 
 	if err != nil {
 		fmt.Println("ERROR", err.Error())

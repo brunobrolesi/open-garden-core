@@ -13,7 +13,7 @@ import (
 
 type (
 	addFarmSensorHandler struct {
-		AddFarmSensorUseCase usecase.AddFarmSensorUseCase
+		addFarmSensorUseCase usecase.AddFarmSensorUseCase
 	}
 
 	addFarmSensorBodyRequest struct {
@@ -25,7 +25,7 @@ type (
 
 func NewAddFarmSensorHandler(u usecase.AddFarmSensorUseCase) Handler {
 	return addFarmSensorHandler{
-		AddFarmSensorUseCase: u,
+		addFarmSensorUseCase: u,
 	}
 }
 
@@ -73,7 +73,7 @@ func (h addFarmSensorHandler) Handle(c *gin.Context) {
 		UserId:      userId,
 	}
 
-	result, err := h.AddFarmSensorUseCase.Exec(c, farmSensor)
+	result, err := h.addFarmSensorUseCase.Exec(c, farmSensor)
 
 	if errors.Is(err, model.ErrInvalidFarm) || errors.Is(err, model.ErrInvalidSensor) {
 		c.JSON(http.StatusBadRequest, gin.H{

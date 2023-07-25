@@ -10,7 +10,7 @@ import (
 
 type (
 	createFarmHandler struct {
-		CreateFarmUseCase usecase.CreateFarmUseCase
+		createFarmUseCase usecase.CreateFarmUseCase
 	}
 
 	createFarmBodyRequest struct {
@@ -21,7 +21,7 @@ type (
 
 func NewCreateFarmHandler(u usecase.CreateFarmUseCase) Handler {
 	return createFarmHandler{
-		CreateFarmUseCase: u,
+		createFarmUseCase: u,
 	}
 }
 
@@ -58,7 +58,7 @@ func (h createFarmHandler) Handle(c *gin.Context) {
 		Owner:   userId,
 	}
 
-	result, err := h.CreateFarmUseCase.Exec(c, farm)
+	result, err := h.createFarmUseCase.Exec(c, farm)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

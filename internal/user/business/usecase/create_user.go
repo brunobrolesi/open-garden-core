@@ -19,22 +19,22 @@ type (
 	}
 
 	createUser struct {
-		HashService    gateway.HashService
-		UserRepository gateway.UserRepository
-		TokenService   gateway.TokenService
+		hashService    gateway.HashService
+		userRepository gateway.UserRepository
+		tokenService   gateway.TokenService
 	}
 )
 
 func NewCreateUserUseCase(hashService gateway.HashService, userRepository gateway.UserRepository, tokenService gateway.TokenService) CreateUserUseCase {
 	return createUser{
-		HashService:    hashService,
-		UserRepository: userRepository,
-		TokenService:   tokenService,
+		hashService:    hashService,
+		userRepository: userRepository,
+		tokenService:   tokenService,
 	}
 }
 
 func (c createUser) Exec(ctx context.Context, user CreateUserInputDto) (model.Token, error) {
-	isEmailInUse, err := c.UserRepository.IsEmailInUse(ctx, user.Email)
+	isEmailInUse, err := c.userRepository.IsEmailInUse(ctx, user.Email)
 
 	if err != nil {
 		return "", err
@@ -44,7 +44,7 @@ func (c createUser) Exec(ctx context.Context, user CreateUserInputDto) (model.To
 		return "", model.ErrEmailInUse
 	}
 
-	hashedPassword, err := c.HashService.GenerateHash(user.Password)
+	hashedPassword, err := c.hashService.GenerateHash(user.Password)
 
 	if err != nil {
 		return "", err
@@ -56,13 +56,13 @@ func (c createUser) Exec(ctx context.Context, user CreateUserInputDto) (model.To
 		Password:    hashedPassword,
 		Active:      true,
 	}
-	newUser, err := c.UserRepository.CreateUser(ctx, u)
+	newUser, err := c.userRepository.CreateUser(ctx, u)
 
 	if err != nil {
 		return "", err
 	}
 
-	token, err := c.TokenService.GenerateToken(newUser.Id)
+	token, err := c.tokenService.GenerateToken(newUser.Id)
 
 	if err != nil {
 		return "", err
