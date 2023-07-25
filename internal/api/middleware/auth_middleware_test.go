@@ -6,9 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	mocks_gateway "github.com/brunobrolesi/open-garden-core/internal/sensor/business/gateway/mocks"
-	"github.com/brunobrolesi/open-garden-core/internal/sensor/business/model"
-	"github.com/brunobrolesi/open-garden-core/internal/sensor/infra/delivery/middleware"
+	"github.com/brunobrolesi/open-garden-core/internal/api/middleware"
+	mocks_middleware "github.com/brunobrolesi/open-garden-core/internal/api/middleware/mocks"
 	"github.com/brunobrolesi/open-garden-core/internal/shared"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
@@ -18,13 +17,13 @@ import (
 func TestAuthMiddleware(t *testing.T) {
 	type TestSuite struct {
 		Sut              *gin.Engine
-		TokenServiceMock *mocks_gateway.TokenService
+		TokenServiceMock *mocks_middleware.TokenService
 	}
 
 	makeTestSuite := func() TestSuite {
 		gin.SetMode(gin.TestMode)
 
-		tokenServiceMock := mocks_gateway.NewTokenService(t)
+		tokenServiceMock := mocks_middleware.NewTokenService(t)
 		sut := middleware.NewAuthMiddleware(tokenServiceMock)
 
 		r := gin.Default()
@@ -68,7 +67,7 @@ func TestAuthMiddleware(t *testing.T) {
 		req.Header.Set("Authorization", "valid_token")
 		testSuite.Sut.ServeHTTP(rr, req)
 
-		testSuite.TokenServiceMock.AssertCalled(t, "ValidateToken", model.Token("valid_token"))
+		testSuite.TokenServiceMock.AssertCalled(t, "ValidateToken", middleware.Token("valid_token"))
 	})
 	t.Run("Should return 401 and correct message if ValidateToken from TokenService returns an error", func(t *testing.T) {
 		testSuite := makeTestSuite()
