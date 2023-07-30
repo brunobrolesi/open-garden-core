@@ -40,7 +40,9 @@ func (h getUserFarmsHandler) Handle(c *gin.Context) {
 	}
 
 	if len(result) == 0 {
-		c.JSON(http.StatusNoContent, nil)
+		c.JSON(http.StatusNotFound, gin.H{
+			"message": "no farms found for this user",
+		})
 		return
 	}
 

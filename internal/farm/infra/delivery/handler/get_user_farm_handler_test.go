@@ -88,7 +88,7 @@ func TestGetUserFarmHandler(t *testing.T) {
 		assert.Equal(t, http.StatusInternalServerError, rr.Code)
 		assert.Equal(t, expected, rr.Body.String())
 	})
-	t.Run("Should return 204 if no farm was found", func(t *testing.T) {
+	t.Run("Should return 404 if no farm was found", func(t *testing.T) {
 		testSuite := makeTestSuite()
 		testSuite.GetUserFarmUseCaseMock.On("Exec", mock.Anything, mock.Anything).Return(model.Farm{}, nil)
 
@@ -97,8 +97,8 @@ func TestGetUserFarmHandler(t *testing.T) {
 		req.Header.Set("X-User-Id", "1")
 		testSuite.Sut.ServeHTTP(rr, req)
 
-		assert.Equal(t, http.StatusNoContent, rr.Code)
-		assert.Empty(t, rr.Body.String())
+		assert.Equal(t, http.StatusNotFound, rr.Code)
+		assert.Equal(t, `{"message":"no farm found for this user"}`, rr.Body.String())
 	})
 	t.Run("Should return 200 and farm on success", func(t *testing.T) {
 		testSuite := makeTestSuite()
