@@ -17,6 +17,20 @@ type SensorMeasurementRepository struct {
 	mock.Mock
 }
 
+// AddSensorMeasurement provides a mock function with given fields: ctx, sensorID, value
+func (_m *SensorMeasurementRepository) AddSensorMeasurement(ctx context.Context, sensorID int, value float64) error {
+	ret := _m.Called(ctx, sensorID, value)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int, float64) error); ok {
+		r0 = rf(ctx, sensorID, value)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // GetSensorPeriodMeasurements provides a mock function with given fields: ctx, sensorID, userID, from, to
 func (_m *SensorMeasurementRepository) GetSensorPeriodMeasurements(ctx context.Context, sensorID int, userID int, from time.Time, to time.Time) (model.SensorMeasurements, error) {
 	ret := _m.Called(ctx, sensorID, userID, from, to)
