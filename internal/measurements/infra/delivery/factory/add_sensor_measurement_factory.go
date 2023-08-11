@@ -7,11 +7,11 @@ import (
 	"github.com/brunobrolesi/open-garden-core/internal/measurements/infra/repository"
 )
 
-func GetSensorMeasurementsFactory() handler.Handler {
+func AddSensorMeasurementFactory() handler.Handler {
 	timescaleConn := db.GetTimescaleInstance()
 	sensorMeasurementRepository := repository.NewTimeScaleSensorMeasurementRepository(timescaleConn)
-	usecase := usecase.NewGetSensorPeriodMeasurementsUseCase(sensorMeasurementRepository)
-	handler := handler.NewGetSensorMeasurementsHandler(usecase)
+	usecase := usecase.NewAddSensorMeasurementUseCase(sensorMeasurementRepository)
+	handler := handler.NewAddSensorMeasurementHandler(usecase)
 
 	return handler
 }

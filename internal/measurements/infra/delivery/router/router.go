@@ -7,10 +7,11 @@ import (
 )
 
 func MeasurementRouter(r *gin.Engine, authMiddleware middleware.Middleware) *gin.RouterGroup {
-	user := r.Group("/measurements")
+	measurement := r.Group("/measurements")
 	{
-		user.GET("/sensors/:id", authMiddleware.Handle, factory.GetSensorMeasurementsFactory().Handle)
+		measurement.GET("/sensors/:id", authMiddleware.Handle, factory.GetSensorMeasurementsFactory().Handle)
+		measurement.POST("/sensor", factory.AddSensorMeasurementFactory().Handle)
 	}
 
-	return user
+	return measurement
 }
