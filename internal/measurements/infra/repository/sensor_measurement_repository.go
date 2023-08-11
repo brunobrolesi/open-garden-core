@@ -12,6 +12,7 @@ import (
 
 const (
 	getSensorPeriodMeasurementsQuery = "SELECT sensor_id, value, time FROM measurements WHERE sensor_id=$1 AND user_id=$2 AND time BETWEEN $3 AND $4"
+	addSensorMeasurementQuery        = "INSERT INTO measurements (sensor_id, value) VALUES ($1, $2)"
 )
 
 type timeScaleSensorMeasurementRepository struct {
@@ -46,4 +47,9 @@ func (r timeScaleSensorMeasurementRepository) GetSensorPeriodMeasurements(ctx co
 	}
 
 	return measurements, nil
+}
+
+func (r timeScaleSensorMeasurementRepository) AddSensorMeasurement(ctx context.Context, sensorID int, value float64) error {
+	_, err := r.conn.Exec(ctx, addSensorMeasurementQuery, sensorID, value)
+	return err
 }
