@@ -8,7 +8,7 @@ import (
 )
 
 func GetUserFarmsFactory() handler.Handler {
-	postgresConn := db.GetInstance()
+	postgresConn := db.GetPostreSQLInstance()
 	farmRepository := repository.NewPostgresFarmRepository(postgresConn)
 	usecase := usecase.NewGetUserFarmsUseCase(farmRepository)
 	handler := handler.NewGetUserFarmsHandler(usecase)

@@ -7,7 +7,7 @@ import (
 )
 
 func NewFarmFacade() FarmFacade {
-	postgresConn := db.GetInstance()
+	postgresConn := db.GetPostreSQLInstance()
 	farmRepository := repository.NewPostgresFarmRepository(postgresConn)
 	uc := usecase.NewGetUserFarmUseCase(farmRepository)
 	return newFarmFacade(uc)

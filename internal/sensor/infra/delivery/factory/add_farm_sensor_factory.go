@@ -10,7 +10,7 @@ import (
 )
 
 func AddFarmSensorFactory() handler.Handler {
-	postgresConn := db.GetInstance()
+	postgresConn := db.GetPostreSQLInstance()
 	farmFacade := facade.NewFarmFacade()
 	farmService := service.NewFarmService(farmFacade)
 	sensorRepository := repository.NewPostgresSensorRepository(postgresConn)

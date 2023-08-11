@@ -18,7 +18,7 @@ func CreateUserFactory() handler.Handler {
 		log.Fatal("fail get hash cost")
 	}
 	hashService := service.NewBcryptHashService(hashCost)
-	postgresConn := db.GetInstance()
+	postgresConn := db.GetPostreSQLInstance()
 	userRepository := repository.NewPostgresUserRepository(postgresConn)
 	tokenService := service.NewJwtTokenService(os.Getenv("JWT_SECRET"))
 	usecase := usecase.NewCreateUserUseCase(hashService, userRepository, tokenService)

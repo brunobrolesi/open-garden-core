@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -48,7 +47,6 @@ func (h getUserFarmHandler) Handle(c *gin.Context) {
 	result, err := h.getUserFarmUseCase.Exec(c, i)
 
 	if err != nil {
-		fmt.Println("ERROR", err.Error())
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": shared.ErrApiInternalServer.Error(),
 		})
