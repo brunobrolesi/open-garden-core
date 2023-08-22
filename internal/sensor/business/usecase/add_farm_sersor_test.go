@@ -16,19 +16,19 @@ func TestAddFarmSensor(t *testing.T) {
 	type TestSuite struct {
 		Sut                      usecase.AddFarmSensorUseCase
 		SensorRepositoryMock     *mocks_gateway.SensorRepository
-		FarmRepositoryMock       *mocks_gateway.FarmRepository
+		FarmServiceMock          *mocks_gateway.FarmService
 		FarmSensorRepositoryMock *mocks_gateway.FarmSensorRepository
 	}
 	makeTestSuite := func() TestSuite {
 		sensorRepositoryMock := mocks_gateway.NewSensorRepository(t)
-		farmRepositoryMock := mocks_gateway.NewFarmRepository(t)
+		farmRepositoryMock := mocks_gateway.NewFarmService(t)
 		farmSensorRepositoryMock := mocks_gateway.NewFarmSensorRepository(t)
 
 		sut := usecase.NewAddFarmSensorUseCase(sensorRepositoryMock, farmRepositoryMock, farmSensorRepositoryMock)
 		return TestSuite{
 			Sut:                      sut,
 			SensorRepositoryMock:     sensorRepositoryMock,
-			FarmRepositoryMock:       farmRepositoryMock,
+			FarmServiceMock:          farmRepositoryMock,
 			FarmSensorRepositoryMock: farmSensorRepositoryMock,
 		}
 	}
@@ -92,18 +92,18 @@ func TestAddFarmSensor(t *testing.T) {
 	t.Run("Should call GetFarmByIdAndUserId from FarmRepository with correct id", func(t *testing.T) {
 		testSuite := makeTestSuite()
 		testSuite.SensorRepositoryMock.On("GetSensorById", mock.Anything, mock.Anything).Return(makeSensor(), nil)
-		testSuite.FarmRepositoryMock.On("GetFarmByIdAndUserId", mock.Anything, mock.Anything, mock.Anything).Return(model.Farm{}, errors.New("any_error"))
+		testSuite.FarmServiceMock.On("GetFarmByIdAndUserId", mock.Anything, mock.Anything, mock.Anything).Return(model.Farm{}, errors.New("any_error"))
 
 		ctx := context.Background()
 		input := makeAddFarmSensorInputDto()
 		testSuite.Sut.Exec(ctx, input)
 
-		testSuite.FarmRepositoryMock.AssertCalled(t, "GetFarmByIdAndUserId", ctx, input.FarmId, input.UserId)
+		testSuite.FarmServiceMock.AssertCalled(t, "GetFarmByIdAndUserId", ctx, input.FarmId, input.UserId)
 	})
 	t.Run("Should return an error if GetFarmByIdAndUserId from FarmRepository return an error", func(t *testing.T) {
 		testSuite := makeTestSuite()
 		testSuite.SensorRepositoryMock.On("GetSensorById", mock.Anything, mock.Anything).Return(makeSensor(), nil)
-		testSuite.FarmRepositoryMock.On("GetFarmByIdAndUserId", mock.Anything, mock.Anything, mock.Anything).Return(model.Farm{}, errors.New("get_farm_error"))
+		testSuite.FarmServiceMock.On("GetFarmByIdAndUserId", mock.Anything, mock.Anything, mock.Anything).Return(model.Farm{}, errors.New("get_farm_error"))
 
 		ctx := context.Background()
 		input := makeAddFarmSensorInputDto()
@@ -115,7 +115,7 @@ func TestAddFarmSensor(t *testing.T) {
 	t.Run("Should return ErrInvalidFarm if GetFarmByIdAndUserId from FarmRepository return empty farm", func(t *testing.T) {
 		testSuite := makeTestSuite()
 		testSuite.SensorRepositoryMock.On("GetSensorById", mock.Anything, mock.Anything).Return(makeSensor(), nil)
-		testSuite.FarmRepositoryMock.On("GetFarmByIdAndUserId", mock.Anything, mock.Anything, mock.Anything).Return(model.Farm{}, nil)
+		testSuite.FarmServiceMock.On("GetFarmByIdAndUserId", mock.Anything, mock.Anything, mock.Anything).Return(model.Farm{}, nil)
 
 		ctx := context.Background()
 		input := makeAddFarmSensorInputDto()
@@ -129,7 +129,7 @@ func TestAddFarmSensor(t *testing.T) {
 		sensor := makeSensor()
 		farm := makeFarm()
 		testSuite.SensorRepositoryMock.On("GetSensorById", mock.Anything, mock.Anything).Return(sensor, nil)
-		testSuite.FarmRepositoryMock.On("GetFarmByIdAndUserId", mock.Anything, mock.Anything, mock.Anything).Return(farm, nil)
+		testSuite.FarmServiceMock.On("GetFarmByIdAndUserId", mock.Anything, mock.Anything, mock.Anything).Return(farm, nil)
 		testSuite.FarmSensorRepositoryMock.On("CreateFarmSensor", mock.Anything, mock.Anything).Return(model.FarmSensor{}, errors.New("any_error"))
 
 		ctx := context.Background()
@@ -148,7 +148,7 @@ func TestAddFarmSensor(t *testing.T) {
 	t.Run("Should return an error if CreateFarmSensor from FarmSensorRepository return an error", func(t *testing.T) {
 		testSuite := makeTestSuite()
 		testSuite.SensorRepositoryMock.On("GetSensorById", mock.Anything, mock.Anything).Return(makeSensor(), nil)
-		testSuite.FarmRepositoryMock.On("GetFarmByIdAndUserId", mock.Anything, mock.Anything, mock.Anything).Return(makeFarm(), nil)
+		testSuite.FarmServiceMock.On("GetFarmByIdAndUserId", mock.Anything, mock.Anything, mock.Anything).Return(makeFarm(), nil)
 		testSuite.FarmSensorRepositoryMock.On("CreateFarmSensor", mock.Anything, mock.Anything).Return(model.FarmSensor{}, errors.New("create_farm_sensor_error"))
 
 		ctx := context.Background()
@@ -172,7 +172,7 @@ func TestAddFarmSensor(t *testing.T) {
 			Active:      true,
 		}
 		testSuite.SensorRepositoryMock.On("GetSensorById", mock.Anything, mock.Anything).Return(makeSensor(), nil)
-		testSuite.FarmRepositoryMock.On("GetFarmByIdAndUserId", mock.Anything, mock.Anything, mock.Anything).Return(makeFarm(), nil)
+		testSuite.FarmServiceMock.On("GetFarmByIdAndUserId", mock.Anything, mock.Anything, mock.Anything).Return(makeFarm(), nil)
 		testSuite.FarmSensorRepositoryMock.On("CreateFarmSensor", mock.Anything, mock.Anything).Return(farmSensor, nil)
 
 		result, err := testSuite.Sut.Exec(ctx, input)

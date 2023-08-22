@@ -22,7 +22,7 @@ type (
 
 	addFarmSensor struct {
 		sensorRepository     gateway.SensorRepository
-		sarmService          gateway.FarmService
+		farmService          gateway.FarmService
 		farmSensorRepository gateway.FarmSensorRepository
 	}
 )
@@ -30,7 +30,7 @@ type (
 func NewAddFarmSensorUseCase(sensorRepository gateway.SensorRepository, farmService gateway.FarmService, farmSensorRepository gateway.FarmSensorRepository) AddFarmSensorUseCase {
 	return addFarmSensor{
 		sensorRepository:     sensorRepository,
-		sarmService:          farmService,
+		farmService:          farmService,
 		farmSensorRepository: farmSensorRepository,
 	}
 }
@@ -46,7 +46,7 @@ func (a addFarmSensor) Exec(ctx context.Context, input AddFarmSensorInputDto) (m
 		return model.FarmSensor{}, model.ErrInvalidSensor
 	}
 
-	f, err := a.sarmService.GetFarmByIdAndUserId(ctx, input.FarmId, input.UserId)
+	f, err := a.farmService.GetFarmByIdAndUserId(ctx, input.FarmId, input.UserId)
 
 	if err != nil {
 		return model.FarmSensor{}, err

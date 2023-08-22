@@ -8,3 +8,5 @@ type FarmSensor struct {
 	Description string `json:"description"`
 	Active      bool   `json:"active"`
 }
+
+type FarmSensors []FarmSensor

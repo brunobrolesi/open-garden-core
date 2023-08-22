@@ -8,4 +8,6 @@ import (
 
 type FarmSensorRepository interface {
 	CreateFarmSensor(context.Context, model.FarmSensor) (model.FarmSensor, error)
+	GetFarmSensorById(context.Context, int) (model.FarmSensor, error)
+	GetFarmSensorsByFarmId(context.Context, int) (model.FarmSensors, error)
 }
