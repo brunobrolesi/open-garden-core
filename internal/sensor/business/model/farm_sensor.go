@@ -1,5 +1,7 @@
 package model
 
+import "reflect"
+
 type FarmSensor struct {
 	Id          int    `json:"id"`
 	Name        string `json:"name"`
@@ -10,3 +12,7 @@ type FarmSensor struct {
 }
 
 type FarmSensors []FarmSensor
+
+func (f FarmSensor) IsEmpty() bool {
+	return reflect.DeepEqual(f, FarmSensor{})
+}
