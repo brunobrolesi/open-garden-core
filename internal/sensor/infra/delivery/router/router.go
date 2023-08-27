@@ -10,6 +10,8 @@ func SensorRouter(r *gin.Engine, authMiddleware middleware.Middleware) *gin.Rout
 	sensor := r.Group("/")
 	{
 		sensor.POST("/farms/:farm_id/sensors", authMiddleware.Handle, factory.AddFarmSensorFactory().Handle)
+		sensor.GET("/farms/:farm_id/sensors", authMiddleware.Handle, factory.GetFarmSensorsFactory().Handle)
+		sensor.POST("/farms/:farm_id/sensors/:farm_sensor_id", authMiddleware.Handle, factory.GetFarmSensorFactory().Handle)
 	}
 
 	return sensor
