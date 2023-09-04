@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	getSensorPeriodMeasurementsQuery = "SELECT sensor_id, value, time FROM measurements WHERE sensor_id=$1 AND user_id=$2 AND time BETWEEN $3 AND $4"
+	getSensorPeriodMeasurementsQuery = "SELECT sensor_id, value, time FROM measurements WHERE sensor_id=$1 AND time BETWEEN $2 AND $3"
 	addSensorMeasurementQuery        = "INSERT INTO measurements (sensor_id, value) VALUES ($1, $2)"
 )
 
@@ -26,7 +26,7 @@ func NewTimeScaleSensorMeasurementRepository(conn *pgx.Conn) gateway.SensorMeasu
 }
 
 func (r timeScaleSensorMeasurementRepository) GetSensorPeriodMeasurements(ctx context.Context, sensorID int, userID int, from time.Time, to time.Time) (model.SensorMeasurements, error) {
-	rows, err := r.conn.Query(ctx, getSensorPeriodMeasurementsQuery, sensorID, userID, from, to)
+	rows, err := r.conn.Query(ctx, getSensorPeriodMeasurementsQuery, sensorID, from, to)
 
 	if !errors.Is(err, pgx.ErrNoRows) && err != nil {
 		return model.SensorMeasurements{}, err
