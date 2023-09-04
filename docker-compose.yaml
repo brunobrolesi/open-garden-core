@@ -1,35 +1,66 @@
 version: '3'
 
 services:
-  db:
-    image: postgres:15.1
-    container_name: db
+  postgres-db:
+    image: postgres:15.4
+    container_name: postgres-db
     restart: always
     tty: true
     volumes:
-      - ./db/dump:/docker-entrypoint-initdb.d
+      - ./db/postgres-dump:/docker-entrypoint-initdb.d
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     networks:
-      - dockernet
+      - backend
     ports:
-      - 5432:5432
+      - 5433:5432
+
+  timescale-db:
+    image: timescale/timescaledb:latest-pg15
+    container_name: timescale-db
+    restart: always
+    tty: true
+    volumes:
+      - ./db/timescale-dump:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    networks:
+      - backend
+    ports:
+      - 5434:5432
 
   app:
     build: 
       context: .
     container_name: app
-    entrypoint: wait-for db:5432 -t 20  -- ./open_garden_core 
+    entrypoint: wait-for postgres-db:5432 -t 30 -- wait-for timescale-db:5432 -t 30 -- ./open_garden_core 
     networks:
-      - dockernet
+      - backend
+      - frontend
     tty: true
     depends_on:
-      - db
+      - postgres-db
+      - timescale-db
+
+  nginx:
+    build: 
+      context: nginx
+    environment:
+      - APP_PORT=${APP_PORT}
+    container_name: nginx
+    networks:
+      - frontend
     ports:
-      - 8080:8080
+      - 8080:80
+    depends_on:
+      - app
 
 networks:
-  dockernet:
+  backend:
+    driver: bridge
+  frontend:
     driver: bridge

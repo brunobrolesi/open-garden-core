@@ -1,4 +1,4 @@
-FROM golang:1.20-alpine as builder
+FROM golang:1.21-alpine as builder
 
 WORKDIR /usr/src/app
 
@@ -13,7 +13,8 @@ RUN apk update
 ENV WAIT_FOR_VERSION v2.2.4
 
 RUN wget -q -O /usr/bin/wait-for https://raw.githubusercontent.com/eficode/wait-for/$WAIT_FOR_VERSION/wait-for && \
-    chmod +x /usr/bin/wait-for
+    chmod +x /usr/bin/wait-for  && \
+    apk add --update --no-cache netcat-openbsd
 
 EXPOSE 8080
 
