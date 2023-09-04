@@ -9,7 +9,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-const createFarmSensorQuery = "INSERT INTO farm_sensor(name, farm_id, sensor_model, description) values($1, $2, $3) returning (id)"
+const createFarmSensorQuery = "INSERT INTO farm_sensor(name, farm_id, sensor_model, description) values($1, $2, $3, $4) returning (id)"
 const getFarmSensorByIdQuery = "SELECT id, name, farm_id, sensor_model, description, active FROM farm_sensor WHERE id = $1"
 const getFarmSensorsByFarmIdQuery = "SELECT id, name, farm_id, sensor_model, description, active FROM farm_sensor WHERE farm_id = $1"
 
@@ -52,7 +52,7 @@ func (r farmSensorRepository) GetFarmSensorsByFarmId(ctx context.Context, farmId
 
 	for rows.Next() {
 		f := model.FarmSensor{}
-		rows.Scan(&f.Id, &f.Name, &f.FarmId, &f.SensorModel, f.Description, &f.Active)
+		rows.Scan(&f.Id, &f.Name, &f.FarmId, &f.SensorModel, &f.Description, &f.Active)
 		farmSensors = append(farmSensors, f)
 	}
 
