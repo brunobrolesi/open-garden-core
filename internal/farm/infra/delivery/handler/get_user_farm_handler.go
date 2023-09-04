@@ -31,7 +31,7 @@ func (h getUserFarmHandler) Handle(c *gin.Context) {
 		return
 	}
 
-	id, err := strconv.Atoi(c.Param("id"))
+	id, err := strconv.Atoi(c.Param("farm_id"))
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{

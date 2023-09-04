@@ -11,7 +11,7 @@ func FarmRouter(r *gin.Engine, authMiddleware middleware.Middleware) *gin.Router
 	{
 		user.POST("/", authMiddleware.Handle, factory.CreateFarmFactory().Handle)
 		user.GET("/", authMiddleware.Handle, factory.GetUserFarmsFactory().Handle)
-		user.GET("/:id", authMiddleware.Handle, factory.GetUserFarmFactory().Handle)
+		user.GET("/:farm_id", authMiddleware.Handle, factory.GetUserFarmFactory().Handle)
 	}
 
 	return user
