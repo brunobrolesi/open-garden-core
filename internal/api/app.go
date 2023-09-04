@@ -1,11 +1,14 @@
 package api
 
 import (
+	"os"
+
 	"github.com/brunobrolesi/open-garden-core/internal/api/router"
 )
 
 func StartApp() {
 	router := router.ApiRouter()
 
-	router.Run(":8080")
+	port := os.Getenv("APP_PORT")
+	router.Run(":" + port)
 }
