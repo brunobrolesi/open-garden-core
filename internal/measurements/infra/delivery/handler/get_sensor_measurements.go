@@ -41,7 +41,7 @@ func (h getSensorMeasurementsHandler) Handle(c *gin.Context) {
 		return
 	}
 
-	from, err := time.Parse(shared.DateParamLayout, c.Query("from"))
+	from, err := time.Parse(time.RFC3339, c.Query("from"))
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -50,7 +50,7 @@ func (h getSensorMeasurementsHandler) Handle(c *gin.Context) {
 		return
 	}
 
-	to, err := time.Parse(shared.DateParamLayout, c.Query("to"))
+	to, err := time.Parse(time.RFC3339, c.Query("to"))
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{

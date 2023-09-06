@@ -11,7 +11,6 @@ import (
 	"github.com/brunobrolesi/open-garden-core/internal/measurements/business/usecase"
 	mocks_usecase "github.com/brunobrolesi/open-garden-core/internal/measurements/business/usecase/mocks"
 	"github.com/brunobrolesi/open-garden-core/internal/measurements/infra/delivery/handler"
-	"github.com/brunobrolesi/open-garden-core/internal/shared"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -77,7 +76,7 @@ func TestGetSensorMeasurements(t *testing.T) {
 		testSuite := makeTestSuite()
 
 		rr := httptest.NewRecorder()
-		req, _ := http.NewRequest(http.MethodGet, "/measurements/sensors/1?from=2023-01-02T15:04:05", nil)
+		req, _ := http.NewRequest(http.MethodGet, "/measurements/sensors/1?from=2023-01-02T15:04:05Z", nil)
 		req.Header.Set("X-User-Id", "1")
 		testSuite.Sut.ServeHTTP(rr, req)
 
@@ -90,12 +89,12 @@ func TestGetSensorMeasurements(t *testing.T) {
 
 		testSuite.GetSensorPeriodMeasurementsUseCaseMock.On("Exec", mock.Anything, mock.Anything).Return(model.SensorMeasurements{}, nil)
 		rr := httptest.NewRecorder()
-		req, _ := http.NewRequest(http.MethodGet, "/measurements/sensors/1?from=2023-01-02T15:04:05&to=2023-01-03T15:04:05", nil)
+		req, _ := http.NewRequest(http.MethodGet, "/measurements/sensors/1?from=2023-01-02T15:04:05Z&to=2023-01-03T15:04:05Z", nil)
 		req.Header.Set("X-User-Id", "2")
 		testSuite.Sut.ServeHTTP(rr, req)
 
-		from, _ := time.Parse(shared.DateParamLayout, "2023-01-02T15:04:05")
-		to, _ := time.Parse(shared.DateParamLayout, "2023-01-03T15:04:05")
+		from, _ := time.Parse(time.RFC3339, "2023-01-02T15:04:05Z")
+		to, _ := time.Parse(time.RFC3339, "2023-01-03T15:04:05Z")
 		expectedCall := usecase.GetSensorPeriodMeasurementsInputDto{
 			SensorId: 1,
 			UserID:   2,
@@ -109,7 +108,7 @@ func TestGetSensorMeasurements(t *testing.T) {
 
 		testSuite.GetSensorPeriodMeasurementsUseCaseMock.On("Exec", mock.Anything, mock.Anything).Return(model.SensorMeasurements{}, errors.New("use case error"))
 		rr := httptest.NewRecorder()
-		req, _ := http.NewRequest(http.MethodGet, "/measurements/sensors/1?from=2023-01-02T15:04:05&to=2023-01-03T15:04:05", nil)
+		req, _ := http.NewRequest(http.MethodGet, "/measurements/sensors/1?from=2023-01-02T15:04:05Z&to=2023-01-03T15:04:05Z", nil)
 		req.Header.Set("X-User-Id", "1")
 		testSuite.Sut.ServeHTTP(rr, req)
 
@@ -122,7 +121,7 @@ func TestGetSensorMeasurements(t *testing.T) {
 
 		testSuite.GetSensorPeriodMeasurementsUseCaseMock.On("Exec", mock.Anything, mock.Anything).Return(model.SensorMeasurements{}, nil)
 		rr := httptest.NewRecorder()
-		req, _ := http.NewRequest(http.MethodGet, "/measurements/sensors/1?from=2023-01-02T15:04:05&to=2023-01-03T15:04:05", nil)
+		req, _ := http.NewRequest(http.MethodGet, "/measurements/sensors/1?from=2023-01-02T15:04:05Z&to=2023-01-03T15:04:05Z", nil)
 		req.Header.Set("X-User-Id", "1")
 		testSuite.Sut.ServeHTTP(rr, req)
 
@@ -133,10 +132,10 @@ func TestGetSensorMeasurements(t *testing.T) {
 	t.Run("should return measurements on success", func(t *testing.T) {
 		testSuite := makeTestSuite()
 
-		timeValue, _ := time.Parse(shared.DateParamLayout, "2023-01-02T15:04:05")
+		timeValue, _ := time.Parse(time.RFC3339, "2023-01-02T15:04:05Z")
 		testSuite.GetSensorPeriodMeasurementsUseCaseMock.On("Exec", mock.Anything, mock.Anything).Return(model.SensorMeasurements{{SensorID: 1, Time: timeValue, Value: 10.5}}, nil)
 		rr := httptest.NewRecorder()
-		req, _ := http.NewRequest(http.MethodGet, "/measurements/sensors/1?from=2023-01-02T15:04:05&to=2023-01-03T15:04:05", nil)
+		req, _ := http.NewRequest(http.MethodGet, "/measurements/sensors/1?from=2023-01-02T15:04:05Z&to=2023-01-03T15:04:05Z", nil)
 		req.Header.Set("X-User-Id", "1")
 		testSuite.Sut.ServeHTTP(rr, req)
 
