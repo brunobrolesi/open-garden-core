@@ -28,7 +28,7 @@ func TestGetUserFarmHandler(t *testing.T) {
 		sut := handler.NewGetUserFarmHandler(getUserFarmUseCaseMock)
 
 		r := gin.Default()
-		r.GET("/farm/:id", sut.Handle)
+		r.GET("/farm/:farm_id", sut.Handle)
 
 		return TestSuite{
 			Sut:                    r,
